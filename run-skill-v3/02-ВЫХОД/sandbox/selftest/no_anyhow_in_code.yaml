@@ -1,0 +1,12 @@
+constraints:
+- id: C-PAY-005
+  name: no_anyhow_in_code
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: anyhow::|Box<dyn
+  std_ref: Стандарт платёжного ядра §3.2
+  rationale: '[Стандарт платёжного ядра §3.2] anyhow и Box<dyn Error> в коде домена
+    запрещены'
+  severity: warn
+  owner: '@dka-payments'

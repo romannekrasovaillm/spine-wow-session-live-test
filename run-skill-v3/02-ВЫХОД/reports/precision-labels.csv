@@ -1,0 +1,4 @@
+rule,repo,file,line,message,label
+authorize_idempotent,payments-arm-a,src/**/*.rs,0,must_contain: паттерн '[Ii]dempotenc' не найден ни в одном файле по glob 'src/**/*.rs',tp
+tech_radar_hold,cards-product,Cargo.toml,10,"deny_dependency: пакет 'left-pad' из deny-списка — основание: Техрадар ДКА, зона HOLD",tp
+thiserror_for_errors,payments-arm-a,Cargo.toml,0,must_contain: паттерн 'thiserror' не найден ни в одном файле по glob 'Cargo.toml',tp

@@ -1,0 +1,19 @@
+constraints:
+  - id: C-PAY-008
+    name: no_float_suffix_literal
+    type: must_not_contain
+    glob:
+      - src/**/*.rs
+    pattern: '[0-9]f(32|64)\b'
+    std_ref: Стандарт платёжного ядра §2.1
+    rationale: "[Стандарт платёжного ядра §2.1] суффиксный литерал"
+    severity: warn
+  - id: C-PAY-009
+    name: no_anyhow_alias
+    type: must_not_contain
+    glob:
+      - "**/*.rs"
+    pattern: 'use\s+anyhow\s+as\s+'
+    std_ref: Стандарт платёжного ядра §3.2
+    rationale: "[Стандарт платёжного ядра §3.2] алиас anyhow"
+    severity: warn

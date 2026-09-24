@@ -1,0 +1,20 @@
+{
+ "authorize_idempotent": {
+  "tp": 1,
+  "n": 1,
+  "precision": 1.0,
+  "lower": 0.20654329147389294
+ },
+ "tech_radar_hold": {
+  "tp": 1,
+  "n": 1,
+  "precision": 1.0,
+  "lower": 0.20654329147389294
+ },
+ "thiserror_for_errors": {
+  "tp": 1,
+  "n": 1,
+  "precision": 1.0,
+  "lower": 0.20654329147389294
+ }
+}

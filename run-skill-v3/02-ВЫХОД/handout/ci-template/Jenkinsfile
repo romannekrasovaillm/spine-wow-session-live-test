@@ -1,0 +1,38 @@
+// Jenkinsfile джобы ДКА (шаблон). Лежит в репозитории ДКА `dka-ci`, а НЕ в продукте.
+// Подключение: Organization Folder / джоба по вебхуку Bitbucket на PR пилотных продуктов.
+// Bitbucket: обязательная сборка со статусом этой джобы перед слиянием.
+pipeline {
+  agent { label 'linux' }
+  options { timeout(time: 15, unit: 'MINUTES') }
+  environment {
+    ARCH_BE_VERSION = '0.3.8'
+    PRODUCT = "${env.JOB_NAME.tokenize('/')[-2]}"
+  }
+  stages {
+    stage('Инструменты и реестр ДКА') {
+      steps {
+        dir('.dka') {
+          git url: 'ssh://git@bitbucket.example/dka/dka-ci.git', branch: 'release', credentialsId: 'dka-ci-ro'
+        }
+        sh '''
+          curl -fsSL -o arch-be        "$NEXUS_URL/arch-be/$ARCH_BE_VERSION/arch-be"
+          curl -fsSL -o arch-be.sha256 "$NEXUS_URL/arch-be/$ARCH_BE_VERSION/arch-be.sha256"
+          sha256sum -c arch-be.sha256 && chmod +x arch-be
+        '''
+      }
+    }
+    stage('Гейт ДКА') {
+      steps {
+        sh "git fetch --no-tags origin ${env.CHANGE_TARGET}:refs/remotes/origin/${env.CHANGE_TARGET}"
+        // Скрипт — из checkout ДКА (.dka/ci), никогда не из рабочей копии продукта.
+        sh "ARCH_BE=./arch-be DKA_OUT=gate-out .dka/ci/dka-gate.sh \"$WORKSPACE\" .dka \"$PRODUCT\" origin/${env.CHANGE_TARGET}"
+      }
+    }
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: 'gate-out/corp-junit.xml'
+      archiveArtifacts artifacts: 'gate-out/*', allowEmptyArchive: true, fingerprint: true
+    }
+  }
+}

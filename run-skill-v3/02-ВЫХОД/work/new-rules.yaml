@@ -1,0 +1,26 @@
+# Новые правила версии 2026.2. Закрывают два обхода, измеренных на подготовке:
+#   - суффиксный литерал 1.5f64 не ловился правилом no_float_for_money (\b перед f);
+#   - алиас use anyhow as a; не ловился правилом no_anyhow_in_code.
+# Источник обходов: reports/selftest.md, sandbox/probe/. Требуют подтверждения архитектором.
+- id: C-PAY-008
+  name: no_float_suffix_literal
+  type: must_not_contain
+  glob:
+    - src/**/*.rs
+  pattern: '[0-9]f(32|64)\b'
+  std_ref: Стандарт платёжного ядра §2.1
+  rationale: "[Стандарт платёжного ядра §2.1] денежная сумма в типе с плавающей точкой, записанном суффиксом литерала"
+  severity: warn
+  owner: "@dka-payments"
+  applies_to:
+    - payment-core
+- id: C-PAY-009
+  name: no_anyhow_alias
+  type: must_not_contain
+  glob:
+    - "**/*.rs"
+  pattern: 'use\s+anyhow\s+as\s+'
+  std_ref: Стандарт платёжного ядра §3.2
+  rationale: "[Стандарт платёжного ядра §3.2] anyhow подключён под другим именем"
+  severity: warn
+  owner: "@dka-payments"

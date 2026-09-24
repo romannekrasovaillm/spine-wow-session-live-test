@@ -1,0 +1,46 @@
+version: '2026.1'
+constraints:
+- id: C-PAY-005
+  name: no_anyhow_in_code
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: anyhow::|Box<dyn
+  std_ref: Стандарт платёжного ядра §3.2
+  rationale: '[Стандарт платёжного ядра §3.2] anyhow и Box<dyn Error> в коде домена
+    запрещены'
+  severity: warn
+  owner: '@dka-payments'
+- id: C-PAY-004
+  name: tech_radar_hold
+  type: deny_dependency
+  deny:
+  - anyhow
+  - left-pad
+  reference: Техрадар ДКА, зона HOLD
+  std_ref: Стандарт платёжного ядра §5.1
+  rationale: '[Стандарт платёжного ядра §5.1] библиотека из зоны HOLD (anyhow, left-pad)
+    не используется'
+  fix_hint: thiserror вместо anyhow; замена left-pad на штатную утилиту
+  severity: warn
+  owner: '@dka-tech-radar'
+  closed_by:
+  - tech_radar_renamed
+- id: C-PAY-006
+  name: tech_radar_renamed
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: package\s*=\s*"(anyhow|left-pad)"
+  std_ref: Стандарт платёжного ядра §5.1
+  rationale: '[Стандарт платёжного ядра §5.1] пакет из зоны HOLD подключён под другим
+    именем'
+  severity: warn
+  owner: '@dka-tech-radar'
+- id: C-PAY-007
+  name: observability_standard
+  unverifiable: true
+  owner: '@dka-observability'
+  std_ref: Стандарт платёжного ядра §6.1
+  rationale: '[Стандарт платёжного ядра §6.1] метрики по стандарту наблюдаемости —
+    ручной контур ревью'

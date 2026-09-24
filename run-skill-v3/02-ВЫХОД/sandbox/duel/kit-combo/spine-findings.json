@@ -1,0 +1,128 @@
+{
+ "C01": [],
+ "C02": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/types.rs",
+   "line": 1,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': pub type Amount = f64;"
+  }
+ ],
+ "C03": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/lib.rs",
+   "line": 34,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': (p.amount_minor as f64 * 0.015).round() as i64"
+  }
+ ],
+ "C04": [
+  {
+   "rule": "tech_radar_git",
+   "requirement": "tech_radar",
+   "file": "Cargo.toml",
+   "line": 9,
+   "message": "must_not_contain: запрещённый паттерн 'git\\s*=\\s*\"[^\"]*(anyhow|left-pad)[^\"]*\"': pad = { git = \"https://github.com/example/left-pad\" }"
+  }
+ ],
+ "C05": [
+  {
+   "rule": "tech_radar_lock",
+   "requirement": "tech_radar",
+   "file": "Cargo.lock",
+   "line": 4,
+   "message": "must_not_contain: запрещённый паттерн 'name = \"(anyhow|left-pad)\"': name = \"anyhow\""
+  }
+ ],
+ "C06": [
+  {
+   "rule": "tech_radar",
+   "requirement": "tech_radar",
+   "file": "Cargo.toml",
+   "line": 7,
+   "message": "deny_dependency: пакет 'anyhow' из deny-списка"
+  },
+  {
+   "rule": "tech_radar",
+   "requirement": "tech_radar",
+   "file": "crates/core/Cargo.toml",
+   "line": 8,
+   "message": "deny_dependency: пакет 'anyhow' из deny-списка"
+  }
+ ],
+ "C07": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/generated/mod.rs",
+   "line": 3503,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': pub refund_amount: f64,"
+  }
+ ],
+ "C08": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/lib.rs",
+   "line": 3,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': pub amount: f64,"
+  }
+ ],
+ "C09": [
+  {
+   "rule": "tech_radar",
+   "requirement": "tech_radar",
+   "file": "crates/svc-14/Cargo.toml",
+   "line": 9,
+   "message": "deny_dependency: пакет 'left-pad' из deny-списка"
+  }
+ ],
+ "C10": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/lib.rs",
+   "line": 37,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': let expected_fee: f64 = 12.5;"
+  }
+ ],
+ "C11": [
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/metrics.rs",
+   "line": 2,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': pub p99_latency_ms: f64,"
+  },
+  {
+   "rule": "money_float",
+   "requirement": "money_float",
+   "file": "src/metrics.rs",
+   "line": 3,
+   "message": "must_not_contain: запрещённый паттерн '\\bf(32|64)\\b': pub error_rate: f64,"
+  }
+ ],
+ "C12": [],
+ "C13": [
+  {
+   "rule": "idempotency",
+   "requirement": "idempotency",
+   "file": "**/src/**/*.rs",
+   "line": 0,
+   "message": "must_contain: паттерн '[Ii]dempotenc' не найден ни в одном файле по glob '**/src/**/*.rs'"
+  }
+ ],
+ "C14": [],
+ "C15": [],
+ "C16": [
+  {
+   "rule": "tech_radar_renamed",
+   "requirement": "tech_radar",
+   "file": "Cargo.toml",
+   "line": 9,
+   "message": "must_not_contain: запрещённый паттерн 'package\\s*=\\s*\"(anyhow|left-pad)\"': errs = { package = \"anyhow\", version = \"1\" }"
+  }
+ ]
+}

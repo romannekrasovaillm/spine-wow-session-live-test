@@ -1,0 +1,14 @@
+constraints:
+- id: C-PAY-002
+  name: thiserror_for_errors
+  type: must_contain
+  glob: Cargo.toml
+  pattern: thiserror
+  std_ref: Стандарт платёжного ядра §3.2
+  rationale: '[Стандарт платёжного ядра §3.2] ошибки домена описываются типизированно
+    через thiserror'
+  fix_hint: derive(thiserror::Error) на enum ошибок домена
+  severity: warn
+  owner: '@dka-payments'
+  applies_to:
+  - payment-core

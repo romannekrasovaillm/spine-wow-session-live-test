@@ -1,0 +1,9 @@
+[package]
+name = "c16"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1"
+thiserror = "2"
+errs = { package = "anyhow", version = "1" }
