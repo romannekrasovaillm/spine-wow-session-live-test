@@ -1,0 +1,133 @@
+{
+  "arch_be": "0.3.8",
+  "attestation": "sha256:339c01a20cde52e7f55be41af7b080dda26aa83e94f94609c2f49de5197d2b4b",
+  "components": [
+    {
+      "detail": "Правил: 7, нарушений: 3 (error: 1, warn: 2); реестр: 8 правил (error: 4), отпечаток 234b1f8c — файл: .arch-handoff/CONSTRAINTS.yaml",
+      "findings_digest": "sha256:e728dec92ed0fd85d44b946d44f28aa632496c91f0c15023dc6834e6fb2cde3b",
+      "findings_total": 3,
+      "name": "fitness",
+      "required": true,
+      "status": "FAIL"
+    },
+    {
+      "detail": "сбой выполнения: control: git diff --name-only origin/main: неоднозначный аргумент «origin/main»: неизвестная редакция или не путь в рабочем каталоге.",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "delta_guard",
+      "required": true,
+      "status": "FAIL"
+    },
+    {
+      "detail": "базовая ревизия 'origin/main' не существует (нет коммитов?) — сравнивать не с чем",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "rule_weakened",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "находок: 0 (error: 0)",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "spine_lint",
+      "required": true,
+      "status": "PASS"
+    },
+    {
+      "detail": "нет каталога model/",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "trace_check",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "нет каталога model/",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "model_validate",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "нет каталога docs/spec — спецификаций для сенсоров нет",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "sensors",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "нет каталога model/ — нечего считать",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "nfr",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "нет EVIDENCE.yaml ни в корне, ни в активных change-dir",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "evidence_verify",
+      "required": true,
+      "status": "SKIP"
+    },
+    {
+      "detail": "не включена: добавьте 'decision_quality' в [gate.required] нужного маршрута",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "decision_quality",
+      "required": false,
+      "status": "SKIP"
+    },
+    {
+      "detail": "не включена: добавьте 'semantic_quality' в [gate.required] нужного маршрута",
+      "findings_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings_total": 0,
+      "name": "semantic_quality",
+      "required": false,
+      "status": "SKIP"
+    }
+  ],
+  "exit_code": 1,
+  "inputs": {
+    "base": "absent",
+    "constraints": "sha256:e9a66dc22f02436bfceec51f43c24c9d0fc858e9e9369aef64049adf5cd30710",
+    "constraints_path": ".arch-handoff/CONSTRAINTS.yaml",
+    "constraints_rules": "8",
+    "evidence_bundles": "0",
+    "judge_raw": "absent",
+    "model": "absent",
+    "route_lock": "absent",
+    "rubric_reports": "0",
+    "spine": "sha256:a8dde1b9bcbf52a7cfb88be224d3eccd2e557588dbfd45cd4101933ededa79a3"
+  },
+  "not_checked": [
+    "trace_check",
+    "rule_weakened",
+    "nfr",
+    "model_validate",
+    "sensors",
+    "evidence_verify"
+  ],
+  "required": [
+    "fitness",
+    "spine_lint",
+    "trace_check",
+    "rule_weakened",
+    "nfr",
+    "model_validate",
+    "delta_guard",
+    "sensors",
+    "evidence_verify"
+  ],
+  "route": {
+    "auto": true,
+    "effective": "Critical",
+    "note": "auto: дифф недоступен (control: anti-bypass: . — база диффа недоступна: неоднозначный аргумент «origin/main...HEAD»: неизвестная редакция или не путь в рабочем каталоге. (не git-репозиторий, нет базового коммита или некорректный GIT_REF)) — fail-safe маршрут Critical"
+  },
+  "schema": "arch-be/gate-verdict/v1",
+  "verdict": "FAIL"
+}

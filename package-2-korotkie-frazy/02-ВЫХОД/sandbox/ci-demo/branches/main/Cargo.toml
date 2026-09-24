@@ -1,0 +1,9 @@
+[package]
+name = "ci-demo-product"
+version = "0.1.0"
+edition = "2021"
+
+# Демонстрационный продукт для гейта CI: зависимость из зоны HOLD.
+[dependencies]
+left-pad = "0.1"
+serde = "1"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="arch-be gate" tests="13" failures="2" skipped="8">
+  <!-- Гейт поймал 2 нарушений до ревью — исправьте и перепроверьте -->
+  <testsuite name="fitness" tests="3" failures="1" skipped="0">
+    <testcase classname="fitness" name="[warn] errors_via_thiserror — **/Cargo.toml:0">
+      <system-out>must_contain: паттерн &apos;thiserror&apos; не найден ни в одном файле по glob &apos;**/Cargo.toml&apos;</system-out>
+    </testcase>
+    <testcase classname="fitness" name="[warn] authorize_idempotent — **/src/**/*.rs:0">
+      <system-out>must_contain: паттерн &apos;idempotenc&apos; не найден ни в одном файле по glob &apos;**/src/**/*.rs&apos;</system-out>
+    </testcase>
+    <testcase classname="fitness" name="tech_radar_hold — Cargo.toml:8">
+      <failure message="deny_dependency: пакет &apos;left-pad&apos; из deny-списка — основание: Техрадар ДКА, зона HOLD">Cargo.toml:8: deny_dependency: пакет &apos;left-pad&apos; из deny-списка — основание: Техрадар ДКА, зона HOLD</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="delta_guard" tests="1" failures="1" skipped="0">
+    <testcase classname="delta_guard" name="delta_guard — —">
+      <failure message="сбой выполнения: control: git diff --name-only origin/main: неоднозначный аргумент «origin/main»: неизвестная редакция или не путь в рабочем каталоге.">—: сбой выполнения: control: git diff --name-only origin/main: неоднозначный аргумент «origin/main»: неизвестная редакция или не путь в рабочем каталоге.</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="rule_weakened" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="rule_weakened: базовая ревизия &apos;origin/main&apos; не существует (нет коммитов?) — сравнивать не с чем"><skipped message="базовая ревизия &apos;origin/main&apos; не существует (нет коммитов?) — сравнивать не с чем"/></testcase>
+  </testsuite>
+  <testsuite name="spine_lint" tests="1" failures="0" skipped="0">
+    <testcase classname="arch-be gate" name="spine_lint: находок: 0 (error: 0)"/>
+  </testsuite>
+  <testsuite name="trace_check" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="trace_check: нет каталога model/"><skipped message="нет каталога model/"/></testcase>
+  </testsuite>
+  <testsuite name="model_validate" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="model_validate: нет каталога model/"><skipped message="нет каталога model/"/></testcase>
+  </testsuite>
+  <testsuite name="sensors" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="sensors: нет каталога docs/spec — спецификаций для сенсоров нет"><skipped message="нет каталога docs/spec — спецификаций для сенсоров нет"/></testcase>
+  </testsuite>
+  <testsuite name="nfr" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="nfr: нет каталога model/ — нечего считать"><skipped message="нет каталога model/ — нечего считать"/></testcase>
+  </testsuite>
+  <testsuite name="evidence_verify" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="evidence_verify: нет EVIDENCE.yaml ни в корне, ни в активных change-dir"><skipped message="нет EVIDENCE.yaml ни в корне, ни в активных change-dir"/></testcase>
+  </testsuite>
+  <testsuite name="decision_quality" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="decision_quality: не включена: добавьте &apos;decision_quality&apos; в [gate.required] нужного маршрута"><skipped message="не включена: добавьте &apos;decision_quality&apos; в [gate.required] нужного маршрута"/></testcase>
+  </testsuite>
+  <testsuite name="semantic_quality" tests="1" failures="0" skipped="1">
+    <testcase classname="arch-be gate" name="semantic_quality: не включена: добавьте &apos;semantic_quality&apos; в [gate.required] нужного маршрута"><skipped message="не включена: добавьте &apos;semantic_quality&apos; в [gate.required] нужного маршрута"/></testcase>
+  </testsuite>
+</testsuites>
