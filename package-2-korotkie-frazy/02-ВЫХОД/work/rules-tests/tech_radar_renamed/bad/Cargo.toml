@@ -1,0 +1,7 @@
+[package]
+name = "bad"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lp = { package = "left-pad", version = "0.1" }

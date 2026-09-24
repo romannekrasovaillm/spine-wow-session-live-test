@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-006
+  name: tech_radar_hold
+  type: deny_dependency
+  deny:
+  - anyhow
+  - left-pad
+  reference: Техрадар ДКА, зона HOLD
+  std_ref: §5.1 Техрадар
+  rationale: '[§5.1 Техрадар] библиотека из зоны HOLD запрещена к использованию'
+  fix_hint: заменить библиотеку или получить ADR-исключение в реестре ДКА
+  severity: block
+  owner: '@dka-tech-radar'

@@ -1,0 +1,8 @@
+[package]
+name = "bypass"
+version = "0.1.0"
+edition = "2021"
+
+# Формальный обход: запрещённая библиотека подключена под локальным именем.
+[dependencies]
+ah = { package = "anyhow", version = "1" }

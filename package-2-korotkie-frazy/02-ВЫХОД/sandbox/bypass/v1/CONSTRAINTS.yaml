@@ -1,0 +1,5 @@
+constraints:
+- name: product_readme
+  path: .
+  severity: warn
+  type: file_exists

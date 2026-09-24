@@ -1,0 +1,10 @@
+[package]
+name = "bypass"
+version = "0.1.0"
+edition = "2021"
+
+# Формальный обход: переименование записано таблицей, а не инлайн.
+# Разбор подстроки package = "left-pad" это ловит.
+[dependencies.lp]
+package = "left-pad"
+version = "0.1"

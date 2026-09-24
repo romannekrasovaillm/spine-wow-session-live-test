@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-005
+  name: authorize_idempotent
+  type: must_contain
+  glob:
+  - '**/src/**/*.rs'
+  pattern: idempotenc
+  std_ref: §4.1 Идемпотентность
+  rationale: '[§4.1 Идемпотентность] авторизация платежа идемпотентна по ключу: повторный
+    вызов не должен повторять списание'
+  fix_hint: принимать idempotency key и хранить исход первого вызова
+  severity: warn
+  owner: '@dka-payments'

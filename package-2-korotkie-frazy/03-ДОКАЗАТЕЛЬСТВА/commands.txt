@@ -1,0 +1,113 @@
+cd /home/roman/spine-wow-live/arch-session-2 && ls -la && echo "--- session.yaml ---" && cat context/session.yaml
+cd /home/roman/spine-wow-live/arch-session-2 && ls -la context/standard/ && echo "--- exceptions ---" && cat context/exceptions.yaml
+cd /home/roman/spine-wow-live/arch-session-2 && ls -la work/ work/rules-tests/ sandbox/ reports/ 2>&1 | head -60
+ls /home/roman/spine-wow-live/arch-session-2/.qwen/skills/spine-wow-session/references/ && echo "=== rules.md ===" && cat /home/roman/spine-wow-live/arch-session-2/.qwen/skills/spine-wow-session/references/rules.md
+/home/roman/.local/bin/arch-be --version; echo "exit=$?"; ls -d /home/roman/spine-bank/кейсы/drift-control/armA-solution /home/roman/spine-bank/кейсы/drift-control/armB-solution /home/roman/spine-bank/examples/corp-spine/product 2>&1
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py preflight 2>&1 | tail -40
+for r in /home/roman/spine-bank/кейсы/drift-control/armA-solution /home/roman/spine-bank/кейсы/drift-control/armB-solution /home/roman/spine-bank/examples/corp-spine/product; do echo "===== $r"; find "$r" -type f -not -path "*/.git/*" | head -40; done
+cd /home/roman/spine-bank && for f in кейсы/drift-control/armA-solution/Cargo.toml кейсы/drift-control/armA-solution/src/error.rs кейсы/drift-control/armA-solution/src/status.rs кейсы/drift-control/armA-solution/src/currency.rs кейсы/drift-control/armA-solution/src/payment.rs кейсы/drift-control/armA-solution/src/lib.rs кейсы/drift-control/armB-solution/Cargo.toml кейсы/drift-control/armB-solution/src/lib.rs examples/corp-spine/product/Cargo.toml; do echo "===== $f"; cat "$f"; done 2>&1 | head -250
+cd /home/roman/spine-bank && echo "### f32/f64:" && grep -rn --include=*.rs -E '\bf(32|64)\b' кейсы/drift-control examples/corp-spine 2>/dev/null; echo "### anyhow:" && grep -rn --include=Cargo.toml -E 'anyhow|left-pad|left_pad' кейсы/drift-control examples/corp-spine 2>/dev/null; echo "### Box<dyn Error>:" && grep -rn --include=*.rs -E 'Box<dyn +(\w+::)?Error' кейсы/drift-control examples/corp-spine 2>/dev/null; echo "### thiserror:" && grep -rn --include=Cargo.toml --include=*.rs -E 'thiserror' кейсы/drift-control examples/corp-spine 2>/dev/null
+cd /home/roman/spine-bank && for f in кейсы/drift-control/armB-solution/Cargo.toml кейсы/drift-control/armB-solution/src/lib.rs examples/corp-spine/product/Cargo.toml examples/corp-spine/product/CONSTRAINTS.yaml; do echo "===== $f"; cat "$f"; done
+cd /home/roman/spine-bank/кейсы/drift-control/armA-solution && echo "=== currency.rs ===" && cat src/currency.rs && echo "=== payment.rs (head 120) ===" && head -120 src/payment.rs && echo "=== lib.rs ===" && cat src/lib.rs && echo "=== tests ===" && head -60 tests/payment_flow.rs
+cd /home/roman/spine-bank && echo "### float-ish:" && grep -rn --include=*.rs -iE 'float|f64|f32|as f|fraction|/ *100|0\.01' кейсы/drift-control/armA-solution 2>/dev/null | head -30; echo; echo "### armA Cargo.toml deps (full):" && cat кейсы/drift-control/armA-solution/Cargo.toml; echo "### git log armA:" && git -C кейсы/drift-control/armA-solution log --oneline -5 2>&1; echo "### git log armB:" && git -C кейсы/drift-control/armB-solution log --oneline -5 2>&1
+cd /home/roman/spine-bank/examples/corp-spine/product && for f in Cargo.toml CONSTRAINTS.yaml README.md ARCHITECTURE-SPINE.md evidence/pdn-review.json; do echo "===== $f"; cat "$f"; echo; done
+cd /home/roman/spine-bank/examples/corp-spine && find . -type f -not -path "*/.git/*" | head -50; echo "=== tree of corp-spine ==="; ls -la; echo "=== find any .rs anywhere ==="; find . -name "*.rs" | head
+cd /home/roman/spine-bank/кейсы/drift-control/armA-solution && sed -n '120,400p' src/payment.rs; echo "=== event.rs ==="; cat src/event.rs | head -60; echo "=== lib.rs ==="; cat src/lib.rs
+wc -l /home/roman/spine-wow-live/arch-session-2/.qwen/skills/spine-wow-session/scripts/session.py; ls -la /home/roman/spine-wow-live/arch-session-2/.qwen/skills/spine-wow-session/scripts/ /home/roman/spine-wow-live/arch-session-2/.qwen/skills/spine-wow-session/assets/
+ls -la /home/roman/spine-bank/кейсы/drift-control/; echo "=== кейсы dir ==="; ls -la /home/roman/spine-bank/кейсы/; echo "=== examples ==="; ls -la /home/roman/spine-bank/examples/
+cd /home/roman/spine-bank && grep -rniE '\bf(32|64)\b|anyhow|left[-_]pad|Box<dyn|unwrap_or_default' --include=* кейсы/drift-control examples/corp-spine 2>/dev/null | grep -v '\.git/' | head -40
+cd /home/roman/spine-bank/кейсы/drift-control && cat README.md; echo "=========== handoff-example/CONSTRAINTS.yaml"; cat handoff-example/CONSTRAINTS.yaml; echo "=========== ARCHITECTURE-SPINE.md"; cat ARCHITECTURE-SPINE.md
+cd /home/roman/spine-bank/кейсы/drift-control/armA-solution && grep -rniE 'idempot' src/ tests/ | head -20; echo "--- authorize signature ---"; grep -n 'fn authorize' src/payment.rs
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py preflight 2>&1 | tail -40
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py check 2>&1 | tail -20
+/home/roman/.local/bin/arch-be control check --help 2>&1 | head -60; echo "=== control --help ==="; /home/roman/.local/bin/arch-be control --help 2>&1 | head -40
+grep -rn -iE 'override|exclude_glob|applies|scope|repo' /home/roman/spine-bank/docs/control.md /home/roman/spine-bank/docs/corp-spine.md 2>/dev/null | head -60
+cd /home/roman/spine-bank && ls src/ 2>/dev/null | head; echo "=== struct Override ==="; grep -rn -A 12 'struct Override' src/ 2>/dev/null | head -40; echo "=== exclude_glob usage ==="; grep -rn 'exclude_glob' src/*.rs 2>/dev/null | head -20
+cd /home/roman/spine-bank && grep -n -B2 -A 60 'pub struct FitnessRule' src/control.rs | head -90
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest --scaffold && echo "---" && find work/rules-tests -type f | sort
+cd /home/roman/spine-wow-live/arch-session-2 && /home/roman/.local/bin/arch-be control gate --help 2>&1 | head -40; echo "=== top-level ==="; /home/roman/.local/bin/arch-be --help 2>&1 | sed -n '1,60p'
+cd /home/roman/spine-wow-live/arch-session-2 && echo "===== gate =====" && /home/roman/.local/bin/arch-be gate --help 2>&1 | head -60; echo "===== trust =====" && /home/roman/.local/bin/arch-be trust --help 2>&1 | head -50
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest 2>&1 | tail -20
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py check >/dev/null 2>&1 && cp reports/check.json /tmp/run1.json && python3 .qwen/skills/spine-wow-session/scripts/session.py check >/dev/null 2>&1 && cp reports/check.json /tmp/run2.json && if diff -q /tmp/run1.json /tmp/run2.json >/dev/null; then echo "ДЕТЕРМИНИЗМ: два прогона дали идентичный результат"; else echo "РАСХОЖДЕНИЕ:"; diff /tmp/run1.json /tmp/run2.json | head; fi; echo "--- сводка ---"; python3 - <<'PY'
+import json
+d=json.load(open('/tmp/run2.json'))
+for repo,rep in d.items():
+    print(f"{repo}: passed={rep.get('passed')} issues={len(rep.get('issues') or [])} summary={rep.get('summary')}")
+PY
+cd /home/roman/spine-bank/examples/corp-spine/product && /home/roman/.local/bin/arch-be trust . 2>&1 | head -60
+cd /home/roman/spine-wow-live/arch-session-2 && /home/roman/.local/bin/arch-be gate --repo /home/roman/spine-bank/examples/corp-spine/product --constraints work/CONSTRAINTS.corp.yaml --explain 2>&1; echo "EXIT=$?"
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py effective && mkdir -p sandbox/ci-demo/.arch-handoff && cp sandbox/corp/effective-corp.yaml sandbox/ci-demo/.arch-handoff/CONSTRAINTS.yaml && echo "--- effective file head ---" && head -20 sandbox/ci-demo/.arch-handoff/CONSTRAINTS.yaml
+cd /home/roman/spine-wow-live/arch-session-2/sandbox/ci-demo && git init -b main -q && git add -A && git -c user.email=dka@bank -c user.name="DKA" commit -q -m "product: каркас + реестр правил ДКА" && echo "=== ГЕЙТ НА main (как в CI) ===" && /home/roman/.local/bin/arch-be gate --repo . --base main --explain 2>&1 | sed -n '1,25p'; echo "EXIT=${PIPESTATUS[0]}"
+cd /home/roman/spine-wow-live/arch-session-2/sandbox/ci-demo && git checkout -q -b weaken-registry && python3 - <<'PY'
+import yaml
+p='.arch-handoff/CONSTRAINTS.yaml'
+d=yaml.safe_load(open(p))
+for r in d['constraints']:
+    if r['name']=='tech_radar_hold':
+        r['severity']='warn'          # тихое ослабление: block → warn
+        r['deny']=['log4j-core']      # и вырезали left-pad из списка
+yaml.safe_dump(d, open(p,'w'), allow_unicode=True, sort_keys=False)
+print("правило ослаблено: severity block→warn, left-pad убран из deny")
+PY
+git commit -qam "product: правит реестр ДКА (ослабление)" && echo "=== ГЕЙТ на ветке ослабления ===" && /home/roman/.local/bin/arch-be gate --repo . --base main --explain 2>&1 | sed -n '3,14p'
+cd /home/roman/spine-wow-live/arch-session-2/sandbox/ci-demo && git checkout -q main && /home/roman/.local/bin/arch-be gate --repo . --base main --format junit > /tmp/gate-junit.xml 2>/dev/null; echo "exit=$?"; echo "--- junit ---"; head -c 900 /tmp/gate-junit.xml; echo; echo "--- branches ---"; git branch --format='%(refname:short)'
+cd /home/roman/spine-wow-live/arch-session-2 && chmod +x work/ci/gate.sh && cp work/ci/gate.sh sandbox/ci-demo/gate.sh && mkdir -p sandbox/ci-demo/ci && cp work/ci/gate.sh sandbox/ci-demo/ci/gate.sh && cd sandbox/ci-demo && bash ci/gate.sh . ; echo "SCRIPT_EXIT=$?"; echo "--- artifacts ---"; ls -la gate-artifacts/
+cd /home/roman/spine-wow-live/arch-session-2 && rm -f sandbox/ci-demo/gate.sh && python3 .qwen/skills/spine-wow-session/scripts/session.py preflight 2>&1 | tail -25
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py check 2>&1 | tail -5 && echo "=== rules count ===" && python3 -c "import yaml;d=yaml.safe_load(open('work/CONSTRAINTS.corp.yaml'));print(len(d['constraints']),'правил; block:',[r['name'] for r in d['constraints'] if r.get('severity')=='block'])" && echo "=== files ===" && ls -1 reports/ work/ci/
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet init && echo "=== fleet check (все на 2026.1) ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet check 2>&1 | tail -8
+cd /home/roman/spine-wow-live/arch-session-2 && for r in /home/roman/spine-bank/кейсы/drift-control/armA-solution /home/roman/spine-bank/кейсы/drift-control/armB-solution; do echo "=== $r"; /home/roman/.local/bin/arch-be control check "$r" --constraints work/new-rules.yaml --no-exec 2>&1 | tail -6; done
+cd /home/roman/spine-wow-live/arch-session-2 && cat work/new-rules.yaml | sed -n '8p' && for r in armA armB; do echo "=== $r"; /home/roman/.local/bin/arch-be control check /home/roman/spine-bank/кейсы/drift-control/$r-solution --constraints work/new-rules.yaml --no-exec 2>&1 | tail -5; done
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== ВЫПУСК 2026.2 ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet bump --to 2026.2 --add-rules work/new-rules.yaml 2>&1 | tail -12
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== ОТЧЁТ ДКА ПО ФЛОТУ ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet report 2>&1 | tail -8 && echo && echo "=== JSON по одному продукту (для дашборда) ===" && /home/roman/.local/bin/arch-be control report /home/roman/spine-bank/кейсы/drift-control/armA-solution --constraints sandbox/products/payments-arm-a/CONSTRAINTS.yaml --level corp --json 2>&1 | head -c 700
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== ПЕРЕПИНОВКА ПОСЛЕ ОСОЗНАННОГО РЕВЬЮ ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet repin 2>&1 | tail -7
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py bypass 2>&1 | tail -15
+cd /home/roman/spine-wow-live/arch-session-2 && python3 - <<'PY'
+import yaml
+d=yaml.safe_load(open('sandbox/corp/CONSTRAINTS.corp.yaml'))
+for tag, ovr in [("bogus-adr", [{"rule":"tech_radar_hold","adr":"ADR-999","until":"2027-01"}]),
+                 ("expired",  [{"rule":"tech_radar_hold","adr":"ADR-041","until":"2026-01"}]),
+                 ("incomplete",[{"rule":"tech_radar_hold","adr":"ADR-041"}])]:
+    x=dict(d); x.pop("overrides",None); x["overrides"]=ovr
+    yaml.safe_dump(x, open(f'/tmp/{tag}.yaml','w'), allow_unicode=True, sort_keys=False)
+print("ok")
+PY
+for tag in bogus-adr expired incomplete; do echo "=== $tag ==="; /home/roman/.local/bin/arch-be control check /home/roman/spine-bank/examples/corp-spine/product --constraints /tmp/$tag.yaml --no-exec 2>&1 | tail -6; done
+cd /home/roman/spine-bank && sed -n '1,40p' src/adr_registry.rs; echo "=== кто зовёт ==="; grep -rn 'adr_registry\|AdrRegistry' src/*.rs | grep -v '^src/adr_registry.rs' | head -20
+cd /home/roman/spine-wow-live/arch-session-2 && python3 - <<'PY'
+import yaml
+d=yaml.safe_load(open('sandbox/corp/CONSTRAINTS.corp.yaml'))
+x=dict(d); x.pop("overrides",None); x["overrides"]=[{"rule":"tech_radar_hold","adr":"ADR-999","until":"2035-01"}]
+yaml.safe_dump(x, open('/tmp/y2035.yaml','w'), allow_unicode=True, sort_keys=False)
+PY
+echo "=== исключение до 2035 напрямую движку (без сборщика ДКА) ==="; /home/roman/.local/bin/arch-be control check /home/roman/spine-bank/examples/corp-spine/product --constraints /tmp/y2035.yaml --no-exec 2>&1 | grep -E 'override|tech_radar_hold|Итог'; echo; echo "=== тот же ввод через сборщик эффективного файла ДКА ==="; cp /tmp/y2035.yaml context/exceptions.yaml && python3 .qwen/skills/spine-wow-session/scripts/session.py effective 2>&1 | tail -3; git -C /home/roman/spine-wow-live/arch-session-2 status >/dev/null 2>&1 || true
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== SELFTEST (9 правил) ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest 2>&1 | tail -13 && echo && echo "=== PREFLIGHT ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py preflight 2>&1 | grep -E 'правил|находок|Проблем|^-' | head -12
+cd /home/roman/spine-wow-live/arch-session-2 && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest 2>&1 | tail -12
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== CHECK (реестр 2026.2, 9 правил) ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py check 2>&1 | tail -5 && echo && echo "=== FLEET INIT (чистое состояние на 2026.2) ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet init && python3 .qwen/skills/spine-wow-session/scripts/session.py fleet check 2>&1 | tail -6
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== состояние ===" && python3 -c "
+import yaml
+d=yaml.safe_load(open('work/CONSTRAINTS.corp.yaml'))
+print('реестр ДКА: версия', d['version'], '|', len(d['constraints']), 'правил | block:', [r['name'] for r in d['constraints'] if r.get('severity')=='block'])
+" && python3 -c "
+import yaml
+print('исключений в реестре ДКА:', len((yaml.safe_load(open('context/exceptions.yaml')) or {}).get('overrides') or []))
+" && echo && echo "=== отчёты ===" && ls -1 reports/ && echo && echo "=== гейт (демо, ветка main) ===" && (cd sandbox/ci-demo && bash ci/gate.sh . 2>&1 | tail -2)
+cd /home/roman/spine-wow-live/arch-session-2 && mkdir -p handout && cp -r work/ci handout/ci && cp -r work/rules-tests handout/rules-tests && cp work/new-rules.yaml handout/new-rules.yaml && echo "дополнительные материалы подготовлены" && echo "=== PACK ===" && python3 .qwen/skills/spine-wow-session/scripts/session.py pack 2>&1 | tail -6
+cd /home/roman/spine-wow-live/arch-session-2 && echo "=== handout/ ===" && find handout -maxdepth 2 -not -path 'handout/rules-tests/*/*' | sort && echo && echo "=== архив ===" && ls -la handout-spine-session.zip && python3 -c "
+import zipfile
+z=zipfile.ZipFile('handout-spine-session.zip')
+names=z.namelist()
+print('файлов в архиве:', len(names))
+for n in sorted(names):
+    if n.count('/')<=1: print(' ', n)
+"
+cd /home/roman/spine-wow-live/arch-session-2 && python3 -c "
+import shutil, zipfile
+p = shutil.make_archive('handout-spine-session', 'zip', 'handout')
+z = zipfile.ZipFile(p)
+names = z.namelist()
+print('архив пересобран:', p)
+print('файлов:', len(names))
+for n in sorted(names):
+    if n.count('/') <= 1:
+        print(' ', n)
+" && echo && ls -la handout-spine-session.zip

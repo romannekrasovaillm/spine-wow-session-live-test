@@ -1,0 +1,9 @@
+[package]
+name = "bypass"
+version = "0.1.0"
+edition = "2021"
+
+# Формальный обход: библиотека из HOLD переименована локально.
+# Разбор манифеста видит имя "lp", а не "left-pad" — правило может не сработать.
+[dependencies]
+lp = { package = "left-pad", version = "0.1" }

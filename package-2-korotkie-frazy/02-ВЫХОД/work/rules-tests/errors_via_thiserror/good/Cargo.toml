@@ -1,0 +1,11 @@
+# Соблюдение §3.2: ошибки домена строятся через thiserror.
+
+
+[package]
+name = "good"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1"
+thiserror = "2"

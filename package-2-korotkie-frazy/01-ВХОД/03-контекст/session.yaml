@@ -1,0 +1,26 @@
+session:
+  architect: Архитектор ДКА (второй прогон, короткие фразы)
+  domain: Платежи
+  date: '2026-10-01'
+standard:
+  title: Стандарт платёжного ядра v2
+  source_url: Confluence (демо-экспорт)
+  files:
+  - context/standard/payment-core-standard.md
+  architecture_md: null
+  cookbooks: []
+spine:
+  arch_be: /home/roman/.local/bin/arch-be
+  corp_rules: work/CONSTRAINTS.corp.yaml
+  corp_version: '2026.2'
+  exceptions: context/exceptions.yaml
+repos:
+- name: payments-arm-a
+  path: /home/roman/spine-bank/кейсы/drift-control/armA-solution
+- name: payments-arm-b
+  path: /home/roman/spine-bank/кейсы/drift-control/armB-solution
+- name: cards-product
+  path: /home/roman/spine-bank/examples/corp-spine/product
+tuning:
+  min_findings: 3
+  max_findings: 30

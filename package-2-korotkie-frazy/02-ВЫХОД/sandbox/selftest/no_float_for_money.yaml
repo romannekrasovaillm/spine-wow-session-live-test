@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-001
+  name: no_float_for_money
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: \bf(32|64)\b
+  std_ref: §2.1 Денежные суммы
+  rationale: '[§2.1 Денежные суммы] суммы не хранятся в типах с плавающей точкой:
+    потеря точности и ошибки округления'
+  fix_hint: перейти на целые минорные единицы (i64, копейки/центы)
+  severity: warn
+  owner: '@dka-payments'

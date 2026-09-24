@@ -1,0 +1,105 @@
+# Корпоративный слой правил ДКА. Сгенерируется агентом из requirements.md (класс A),
+# затем проверяется архитектором и selftest. Поля правил — references/rules.md.
+version: "2026.2"
+constraints:
+  # R-01 → §2.1. Деньги не в плавающей точке.
+  - id: C-DKA-001
+    name: no_float_for_money
+    type: must_not_contain
+    glob: ["**/*.rs"]
+    pattern: '\bf(32|64)\b'
+    std_ref: "§2.1 Денежные суммы"
+    rationale: "[§2.1 Денежные суммы] суммы не хранятся в типах с плавающей точкой: потеря точности и ошибки округления"
+    fix_hint: "перейти на целые минорные единицы (i64, копейки/центы)"
+    severity: warn
+    owner: "@dka-payments"
+  # R-02 → §3.2. Типизированные доменные ошибки.
+  - id: C-DKA-002
+    name: errors_via_thiserror
+    type: must_contain
+    glob: ["**/Cargo.toml"]
+    pattern: 'thiserror'
+    std_ref: "§3.2 Ошибки"
+    rationale: "[§3.2 Ошибки] доменные ошибки описываются типизированно; стандарт называет thiserror"
+    fix_hint: "добавить thiserror и заменить рукописные impl на #[derive(Error)]"
+    severity: warn
+    owner: "@dka-payments"
+  # R-03 → §3.2. anyhow в коде домена.
+  - id: C-DKA-003
+    name: no_anyhow_in_code
+    type: must_not_contain
+    glob: ["**/*.rs"]
+    pattern: 'anyhow::|anyhow!|use anyhow'
+    std_ref: "§3.2 Ошибки"
+    rationale: "[§3.2 Ошибки] anyhow скрывает тип ошибки от вызывающего; домен описывается типизированно"
+    fix_hint: "вернуть типизированный enum ошибки"
+    severity: warn
+    owner: "@dka-payments"
+  # R-04 → §3.2. Box<dyn Error>.
+  - id: C-DKA-004
+    name: no_box_dyn_error
+    type: must_not_contain
+    glob: ["**/*.rs"]
+    pattern: 'Box<\s*dyn\s+(::)?(std\s*::\s*error\s*::\s*)?Error'
+    std_ref: "§3.2 Ошибки"
+    rationale: "[§3.2 Ошибки] Box<dyn Error> стирает тип ошибки; запрещён наравне с anyhow"
+    fix_hint: "вернуть типизированный enum ошибки"
+    # block: обход через ведущее `::` закрывается паттерном, selftest — «надёжно».
+    severity: block
+    owner: "@dka-payments"
+  # R-05 → §4.1. Идемпотентность авторизации. Структурная проверка (класс B):
+  # ловит наличие ключа/признака, настоящая проверка — поведенческий тест в пилоте.
+  - id: C-DKA-005
+    name: authorize_idempotent
+    type: must_contain
+    glob: ["**/src/**/*.rs"]
+    pattern: 'idempotenc'
+    std_ref: "§4.1 Идемпотентность"
+    rationale: "[§4.1 Идемпотентность] авторизация платежа идемпотентна по ключу: повторный вызов не должен повторять списание"
+    fix_hint: "принимать idempotency key и хранить исход первого вызова"
+    severity: warn
+    owner: "@dka-payments"
+  # R-06 → §5.1. Техрадар, зона HOLD.
+  - id: C-DKA-006
+    name: tech_radar_hold
+    type: deny_dependency
+    deny: ["anyhow", "left-pad"]
+    reference: "Техрадар ДКА, зона HOLD"
+    std_ref: "§5.1 Техрадар"
+    rationale: "[§5.1 Техрадар] библиотека из зоны HOLD запрещена к использованию"
+    fix_hint: "заменить библиотеку или получить ADR-исключение в реестре ДКА"
+    # block: сам по себе обходится переименованием пакета (selftest — «хрупко»),
+    # но в паре с tech_radar_renamed лазейка закрыта; блокируем пару.
+    severity: block
+    owner: "@dka-tech-radar"
+  # R-06 → §5.1. Обход deny_dependency переименованием пакета в Cargo.toml
+  # (`lp = { package = "left-pad" }`, в т.ч. таблицей [dependencies.lp]).
+  - id: C-DKA-008
+    name: tech_radar_renamed
+    type: must_not_contain
+    glob: ["**/Cargo.toml"]
+    pattern: 'package\s*=\s*"(anyhow|left-pad)"'
+    std_ref: "§5.1 Техрадар"
+    rationale: "[§5.1 Техрадар] пакет из зоны HOLD подключён переименованием — запрет обходится сменой локального имени"
+    fix_hint: "убрать зависимость или оформить ADR-исключение в реестре ДКА"
+    severity: block
+    owner: "@dka-tech-radar"
+  # R-06 → §5.1, ред. 2026.2. Усиление §2.1 после selftest: правило по имени типа
+  # обходилось float-литералом без имени (`let rate = 0.985;`). Единица выпуска —
+  # версия слоя: продукты видят «родитель обновился» и перепиниваются осознанно.
+  - id: C-DKA-009
+    name: no_float_literals_for_money
+    type: must_not_contain
+    glob: ["**/src/**/*.rs"]
+    pattern: '(?m)^[^/\n]*\b\d+\.\d+\b'
+    std_ref: "§2.1 Денежные суммы (ред. 2026.2)"
+    rationale: "[§2.1 Денежные суммы] арифметика с плавающей точкой для денег запрещена и без явного имени типа — литерал 0.985 обходит проверку по типу"
+    fix_hint: "считать в минорных единицах целыми числами (i64)"
+    severity: warn
+    owner: "@dka-payments"
+  - id: C-DKA-007
+    name: observability_standard
+    unverifiable: true
+    owner: "@dka-platform"
+    std_ref: "§6.1 Наблюдаемость"
+    rationale: "[§6.1 Наблюдаемость] публикация метрик по стандарту наблюдаемости — ручной контур ревью"

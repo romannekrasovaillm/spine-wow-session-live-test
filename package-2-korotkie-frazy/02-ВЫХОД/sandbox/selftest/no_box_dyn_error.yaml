@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-004
+  name: no_box_dyn_error
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: Box<\s*dyn\s+(::)?(std\s*::\s*error\s*::\s*)?Error
+  std_ref: §3.2 Ошибки
+  rationale: '[§3.2 Ошибки] Box<dyn Error> стирает тип ошибки; запрещён наравне с
+    anyhow'
+  fix_hint: вернуть типизированный enum ошибки
+  severity: block
+  owner: '@dka-payments'

@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-002
+  name: errors_via_thiserror
+  type: must_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: thiserror
+  std_ref: §3.2 Ошибки
+  rationale: '[§3.2 Ошибки] доменные ошибки описываются типизированно; стандарт называет
+    thiserror'
+  fix_hint: 'добавить thiserror и заменить рукописные impl на #[derive(Error)]'
+  severity: warn
+  owner: '@dka-payments'

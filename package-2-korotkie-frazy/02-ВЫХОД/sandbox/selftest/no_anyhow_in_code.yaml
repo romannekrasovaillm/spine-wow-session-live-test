@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-003
+  name: no_anyhow_in_code
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: anyhow::|anyhow!|use anyhow
+  std_ref: §3.2 Ошибки
+  rationale: '[§3.2 Ошибки] anyhow скрывает тип ошибки от вызывающего; домен описывается
+    типизированно'
+  fix_hint: вернуть типизированный enum ошибки
+  severity: warn
+  owner: '@dka-payments'

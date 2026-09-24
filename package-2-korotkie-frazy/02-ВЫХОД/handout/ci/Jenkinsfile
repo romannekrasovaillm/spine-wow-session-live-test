@@ -1,0 +1,63 @@
+// Джоба ДКА: архитектурный гейт по реестру правил, принадлежащему ДКА.
+// Правила и исключения живут в репозитории ДКА; продукт их только потребляет.
+// Слияние в Bitbucket требует статуса этой джобы (branch permissions:
+// required builds). Джоба живёт вне репозитория продукта, поэтому продукт
+// не может её «починить» правкой своего кода.
+
+pipeline {
+  agent { label 'dka-agents' }
+
+  options {
+    timeout(time: 30, unit: 'MINUTES')
+    buildDiscarder(logRotator(numToKeepStr: '50'))
+  }
+
+  environment {
+    ARCH_BE  = '/opt/dka/bin/arch-be'
+    DKA_BASE = 'origin/main'          // анти-ослабление считается против main
+    DKA_OUT  = 'gate-artifacts'
+    // MR из форка: DKA_UNTRUSTED=1 выставляется в job по параметру.
+    DKA_UNTRUSTED = "${params.UNTRUSTED_PR ? '1' : '0'}"
+  }
+
+  parameters {
+    booleanParam(name: 'UNTRUSTED_PR', defaultValue: false,
+                 description: 'PR из форка: не исполнять command_succeeds (--no-exec)')
+  }
+
+  stages {
+    stage('Реестр правил ДКА') {
+      steps {
+        // Реестр .arch-handoff/CONSTRAINTS.yaml принадлежит ДКА: в Bitbucket на
+        // этот путь настроены default reviewers. Здесь только фиксируем его
+        // отпечаток в логе сборки — версия реестра входит в аттестацию вердикта.
+        sh 'git log -1 --format="реестр: %H %s" -- .arch-handoff/CONSTRAINTS.yaml'
+      }
+    }
+
+    stage('Архитектурный гейт') {
+      steps {
+        // Единый гейт: fitness + delta guard + rule_weakened + линтер спайна.
+        // Провал любой составляющей — exit 1.
+        sh 'bash ci/gate.sh "$WORKSPACE"'
+      }
+    }
+  }
+
+  post {
+    always {
+      // Нарушения видны в UI Jenkins как failed tests, с файлом и правилом.
+      junit allowEmptyResults: true, testResults: "${DKA_OUT}/gate-junit.xml"
+      // Паспорт вердикта и пломба — в артефактах сборки.
+      archiveArtifacts artifacts: "${DKA_OUT}/*", allowEmptyArchive: true, fingerprint: true
+    }
+    failure {
+      // Отчёт ДКА по контуру: исключения, просроченные, непроверяемые правила.
+      sh '''
+        arch-be control report "$WORKSPACE" \
+          --constraints .arch-handoff/CONSTRAINTS.yaml --level corp --json \
+          > "$DKA_OUT/corp-report.json" || true
+      '''
+    }
+  }
+}

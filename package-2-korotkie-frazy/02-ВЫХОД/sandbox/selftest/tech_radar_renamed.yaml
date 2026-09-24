@@ -1,0 +1,13 @@
+constraints:
+- id: C-DKA-008
+  name: tech_radar_renamed
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: package\s*=\s*"(anyhow|left-pad)"
+  std_ref: §5.1 Техрадар
+  rationale: '[§5.1 Техрадар] пакет из зоны HOLD подключён переименованием — запрет
+    обходится сменой локального имени'
+  fix_hint: убрать зависимость или оформить ADR-исключение в реестре ДКА
+  severity: block
+  owner: '@dka-tech-radar'
