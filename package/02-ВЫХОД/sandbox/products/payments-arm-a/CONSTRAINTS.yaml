@@ -1,0 +1,2 @@
+extends:
+- ../../corp/CONSTRAINTS.corp.yaml@2026.2

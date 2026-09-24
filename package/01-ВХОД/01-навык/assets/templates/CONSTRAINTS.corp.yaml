@@ -1,0 +1,12 @@
+# Корпоративный слой правил ДКА. Генерируется агентом из requirements.md (класс A),
+# затем проверяется архитектором и selftest. Поля правил — references/rules.md.
+version: "2026.1"
+constraints:
+  - id: C-DKA-001
+    name: tech_radar_hold
+    type: deny_dependency
+    deny: [log4j-core]
+    reference: "Техрадар ДКА, зона HOLD"
+    std_ref: "Техрадар, раздел HOLD"
+    rationale: "[Техрадар ДКА, HOLD] библиотека запрещена к использованию"
+    severity: warn

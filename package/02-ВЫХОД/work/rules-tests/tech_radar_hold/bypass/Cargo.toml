@@ -1,0 +1,4 @@
+[package]
+name = "p"
+[dependencies]
+lp = { package = "left-pad", version = "1" }

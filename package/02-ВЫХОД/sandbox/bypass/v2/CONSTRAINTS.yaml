@@ -1,0 +1,7 @@
+extends:
+- ../../corp/CONSTRAINTS.corp.yaml@2026.2
+constraints:
+- name: thiserror_for_errors
+  type: file_exists
+  path: .
+  severity: warn

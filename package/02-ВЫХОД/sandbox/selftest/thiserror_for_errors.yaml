@@ -1,0 +1,11 @@
+constraints:
+- id: C-PAY-002
+  name: thiserror_for_errors
+  type: must_not_contain
+  glob:
+  - src/**/*.rs
+  pattern: (?m)^\s*impl\s+(?:std::error::Error|std::fmt::Display|fmt::Display|Error)\s+for\s+\w*Error\b
+  std_ref: Стандарт платёжного ядра v2 §3.2
+  rationale: '[Стандарт платёжного ядра v2 §3.2] ошибки домена описываются типизированно
+    (thiserror), а не самописными impl Display/Error'
+  severity: warn

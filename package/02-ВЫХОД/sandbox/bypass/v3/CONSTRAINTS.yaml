@@ -1,0 +1,6 @@
+extends:
+- ../../corp/CONSTRAINTS.corp.yaml@2026.2
+overrides:
+- rule: thiserror_for_errors
+  adr: ADR-999
+  until: 2030-01

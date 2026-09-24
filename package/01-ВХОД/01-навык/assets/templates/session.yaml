@@ -1,0 +1,33 @@
+# session.yaml — контекст сессии. Заполняет архитектор (или агент вместе с ним).
+# Пути — относительно корня рабочей папки сессии или абсолютные; ~ раскрывается.
+
+session:
+  architect: "Фамилия И.О."
+  domain: "Платежи"                 # домен, по которому выбраны репозитории
+  date: "2026-10-01"
+
+standard:
+  title: "Стандарт интеграции v3"   # как он называется в Confluence
+  source_url: "https://confluence.example/display/DKA/Integration-Standard"
+  files:                            # экспорт страниц Confluence в md/html/txt
+    - "context/standard/integration-standard.md"
+  architecture_md: "context/architecture.md"   # необязательно: ваш сгенерированный architecture.md
+  cookbooks: []                     # необязательно: кукбуки и референсы (пути к файлам)
+
+spine:
+  arch_be: "arch-be"                # путь к бинарю Spine Core, если он не в PATH
+  corp_rules: "work/CONSTRAINTS.corp.yaml"   # корпоративный слой правил (генерируется на подготовке)
+  corp_version: "2026.1"            # версия слоя для демо «стандарт как продукт»
+  exceptions: "context/exceptions.yaml"      # реестр исключений ДКА (демо)
+
+repos:                              # 3–5 репозиториев домена, склонированных заранее
+  - name: payments-gateway
+    path: "~/pilot/payments-gateway"
+  - name: payments-core
+    path: "~/pilot/payments-core"
+  - name: notifications
+    path: "~/pilot/notifications"
+
+tuning:
+  min_findings: 5                   # меньше — нет вау-эффекта
+  max_findings: 30                  # больше — перегруз, показывайте топ

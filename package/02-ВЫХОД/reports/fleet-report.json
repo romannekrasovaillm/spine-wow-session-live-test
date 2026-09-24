@@ -1,0 +1,71 @@
+[
+ {
+  "repo": "/home/roman/spine-bank/кейсы/drift-control/armA-solution",
+  "constraints": "/home/roman/spine-wow-live/arch-session/sandbox/products/payments-arm-a/CONSTRAINTS.yaml",
+  "level": "corp",
+  "rules_total": 7,
+  "own": 0,
+  "inherited": {
+   "CONSTRAINTS.corp@2026.2": 7
+  },
+  "pass": 4,
+  "fail": 0,
+  "warn": 1,
+  "passed": false,
+  "overrides": [],
+  "expired_rules": [],
+  "unverifiable_rules": [
+   "authorize_idempotent",
+   "observability_standard"
+  ],
+  "version_mismatches": [
+   "extends: родитель обновился: ../../corp/CONSTRAINTS.corp.yaml@2026.1 → 2026.2 — перепиновать осознанно"
+  ]
+ },
+ {
+  "repo": "/home/roman/spine-bank/кейсы/drift-control/armB-solution",
+  "constraints": "/home/roman/spine-wow-live/arch-session/sandbox/products/payments-arm-b/CONSTRAINTS.yaml",
+  "level": "corp",
+  "rules_total": 7,
+  "own": 0,
+  "inherited": {
+   "CONSTRAINTS.corp@2026.2": 7
+  },
+  "pass": 5,
+  "fail": 0,
+  "warn": 0,
+  "passed": false,
+  "overrides": [],
+  "expired_rules": [],
+  "unverifiable_rules": [
+   "authorize_idempotent",
+   "observability_standard"
+  ],
+  "version_mismatches": [
+   "extends: родитель обновился: ../../corp/CONSTRAINTS.corp.yaml@2026.1 → 2026.2 — перепиновать осознанно"
+  ]
+ },
+ {
+  "repo": "/home/roman/spine-bank/examples/corp-spine/product",
+  "constraints": "/home/roman/spine-wow-live/arch-session/sandbox/products/cards-product/CONSTRAINTS.yaml",
+  "level": "corp",
+  "rules_total": 7,
+  "own": 0,
+  "inherited": {
+   "CONSTRAINTS.corp@2026.2": 7
+  },
+  "pass": 4,
+  "fail": 0,
+  "warn": 1,
+  "passed": false,
+  "overrides": [],
+  "expired_rules": [],
+  "unverifiable_rules": [
+   "authorize_idempotent",
+   "observability_standard"
+  ],
+  "version_mismatches": [
+   "extends: родитель обновился: ../../corp/CONSTRAINTS.corp.yaml@2026.1 → 2026.2 — перепиновать осознанно"
+  ]
+ }
+]

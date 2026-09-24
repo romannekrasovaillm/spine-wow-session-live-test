@@ -1,0 +1,11 @@
+constraints:
+- id: C-PAY-006
+  name: no_box_dyn_error
+  type: must_not_contain
+  glob:
+  - src/**/*.rs
+  pattern: Box<\s*dyn\s+(std::error::)?Error
+  std_ref: Стандарт платёжного ядра v2 §3.2
+  rationale: '[Стандарт платёжного ядра v2 §3.2] Box<dyn Error> запрещён, ошибки домена
+    описываются типизированно'
+  severity: warn
