@@ -1,0 +1,7 @@
+extends:
+- ../dka/corp/CONSTRAINTS.corp.yaml@2026.1
+constraints:
+- name: product_own_rule
+  type: file_exists
+  path: .
+  severity: block

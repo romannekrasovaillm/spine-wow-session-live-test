@@ -1,0 +1,8 @@
+{
+ "no_float_for_money": "надёжно",
+ "thiserror_for_errors": "хрупко: обходится",
+ "tech_radar_hold": "хрупко: обходится",
+ "tech_radar_renamed": "надёжно",
+ "authorize_idempotent": "хрупко: обходится",
+ "idempotency_contract": "надёжно"
+}

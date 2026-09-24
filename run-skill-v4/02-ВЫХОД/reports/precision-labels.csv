@@ -1,0 +1,6 @@
+rule,repo,file,line,message,label
+authorize_idempotent,payments-arm-a,src/**/*.rs,0,must_contain: паттерн '[Ii]dempotenc' не найден ни в одном файле по glob 'src/**/*.rs',tp
+idempotency_contract,payments-arm-a,/home/roman/spine-bank/кейсы/drift-control/armA-solution,0,"command_succeeds: команда 'bash ""$DKA_HOME/contracts/idempotency/run_contract.sh""' завершилась неуспешно (код 1); хвост вывода:
+контракт §4.1 (вариант: API без ключа) НЕ выполнен: повторная авторизаци",tp
+tech_radar_hold,cards-product,Cargo.toml,10,"deny_dependency: пакет 'left-pad' из deny-списка — основание: Техрадар ДКА, HOLD",tp
+thiserror_for_errors,payments-arm-a,Cargo.toml,0,must_contain: паттерн 'thiserror' не найден ни в одном файле по glob 'Cargo.toml',tp

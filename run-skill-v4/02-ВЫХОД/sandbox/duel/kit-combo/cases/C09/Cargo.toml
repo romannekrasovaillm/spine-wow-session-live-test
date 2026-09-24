@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/svc-01", "crates/svc-02", "crates/svc-03", "crates/svc-04", "crates/svc-05", "crates/svc-06", "crates/svc-07", "crates/svc-08", "crates/svc-09", "crates/svc-10", "crates/svc-11", "crates/svc-12", "crates/svc-13", "crates/svc-14", "crates/svc-15", "crates/svc-16", "crates/svc-17", "crates/svc-18", "crates/svc-19", "crates/svc-20"]
+resolver = "2"

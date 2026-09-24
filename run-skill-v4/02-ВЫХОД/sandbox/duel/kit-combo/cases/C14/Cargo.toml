@@ -1,0 +1,8 @@
+[package]
+name = "c14"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1"
+thiserror = "2"

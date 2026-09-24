@@ -1,0 +1,10 @@
+constraints:
+- id: C-PAY-010
+  name: idempotency_contract
+  type: command_succeeds
+  command: bash "$DKA_HOME/contracts/idempotency/run_contract.sh"
+  timeout_secs: 900
+  std_ref: Стандарт платёжного ядра §4.1
+  rationale: '[Стандарт платёжного ядра §4.1] повторный вызов с тем же ключом не списывает
+    повторно'
+  severity: warn

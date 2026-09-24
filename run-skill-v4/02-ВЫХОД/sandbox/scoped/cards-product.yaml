@@ -1,0 +1,37 @@
+version: '2026.1'
+constraints:
+- id: C-PAY-004
+  name: tech_radar_hold
+  type: deny_dependency
+  deny:
+  - anyhow
+  - left-pad
+  reference: Техрадар ДКА, HOLD
+  std_ref: Стандарт платёжного ядра §5.1
+  rationale: '[Стандарт платёжного ядра §5.1] библиотека из зоны HOLD'
+  severity: warn
+  closed_by:
+  - tech_radar_renamed
+- id: C-PAY-006
+  name: tech_radar_renamed
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: package\s*=\s*"(anyhow|left-pad)"
+  std_ref: Стандарт платёжного ядра §5.1
+  rationale: '[Стандарт платёжного ядра §5.1] пакет из зоны HOLD подключён под другим
+    именем'
+  severity: warn
+- id: C-PAY-010
+  name: idempotency_contract
+  type: command_succeeds
+  command: bash "$DKA_HOME/contracts/idempotency/run_contract.sh"
+  timeout_secs: 900
+  std_ref: Стандарт платёжного ядра §4.1
+  rationale: '[Стандарт платёжного ядра §4.1] повторный вызов с тем же ключом не списывает
+    повторно'
+  severity: warn
+- name: observability_standard
+  unverifiable: true
+  owner: '@dka-observability'
+  std_ref: Стандарт платёжного ядра §6.1

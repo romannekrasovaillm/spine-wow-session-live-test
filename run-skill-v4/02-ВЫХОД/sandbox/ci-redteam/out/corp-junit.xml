@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="arch-be control check" tests="6" failures="1" skipped="0">
+  <!-- Гейт поймал 1 нарушений до ревью — исправьте и перепроверьте -->
+  <testsuite name="idempotency_contract" tests="1" failures="0" skipped="0">
+    <testcase classname="idempotency_contract" name="[warn] idempotency_contract — /home/roman/spine-wow-live/arch-session-v4/sandbox/ci-redteam/product">
+      <system-out>command_succeeds: команда &apos;bash &quot;$DKA_HOME/contracts/idempotency/run_contract.sh&quot;&apos; завершилась неуспешно (код 1); хвост вывода:
+контракт §4.1 НЕ выполнен в .: error[E0432]: u error[E0599]:  </system-out>
+    </testcase>
+  </testsuite>
+  <testsuite name="thiserror_for_errors" tests="1" failures="1" skipped="0">
+    <testcase classname="thiserror_for_errors" name="thiserror_for_errors — Cargo.toml">
+      <failure message="must_contain: паттерн &apos;thiserror&apos; не найден ни в одном файле по glob &apos;Cargo.toml&apos;">Cargo.toml: must_contain: паттерн &apos;thiserror&apos; не найден ни в одном файле по glob &apos;Cargo.toml&apos;</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="authorize_idempotent" tests="1" failures="0" skipped="0">
+    <testcase classname="authorize_idempotent" name="[warn] authorize_idempotent — src/**/*.rs">
+      <system-out>must_contain: паттерн &apos;[Ii]dempotenc&apos; не найден ни в одном файле по glob &apos;src/**/*.rs&apos;</system-out>
+    </testcase>
+  </testsuite>
+  <testsuite name="no_float_for_money" tests="1" failures="0" skipped="0">
+    <testcase classname="arch-be control check" name="no_float_for_money: пройдено за 0 мс"/>
+  </testsuite>
+  <testsuite name="tech_radar_hold" tests="1" failures="0" skipped="0">
+    <testcase classname="arch-be control check" name="tech_radar_hold: пройдено за 0 мс"/>
+  </testsuite>
+  <testsuite name="tech_radar_renamed" tests="1" failures="0" skipped="0">
+    <testcase classname="arch-be control check" name="tech_radar_renamed: пройдено за 0 мс"/>
+  </testsuite>
+</testsuites>

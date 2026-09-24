@@ -1,0 +1,144 @@
+{
+ "payments-arm-a": {
+  "repo": "/home/roman/spine-bank/кейсы/drift-control/armA-solution",
+  "passed": true,
+  "issues": [
+   {
+    "file": "/home/roman/spine-bank/кейсы/drift-control/armA-solution",
+    "line": 0,
+    "rule": "idempotency_contract",
+    "message": "command_succeeds: команда 'bash \"$DKA_HOME/contracts/idempotency/run_contract.sh\"' завершилась неуспешно (код 1); хвост вывода:\nконтракт §4.1 (вариант: API без ключа) НЕ выполнен: повторная авторизация отклонена — ретрай клиента не безопасен ",
+    "severity": "warn",
+    "rationale": "[Стандарт платёжного ядра §4.1] повторный вызов с тем же ключом не списывает повторно"
+   },
+   {
+    "file": "Cargo.toml",
+    "line": 0,
+    "rule": "thiserror_for_errors",
+    "message": "must_contain: паттерн 'thiserror' не найден ни в одном файле по glob 'Cargo.toml'",
+    "severity": "warn",
+    "rationale": "[Стандарт платёжного ядра §3.2] ошибки домена описываются типизированно (thiserror)"
+   },
+   {
+    "file": "src/**/*.rs",
+    "line": 0,
+    "rule": "authorize_idempotent",
+    "message": "must_contain: паттерн '[Ii]dempotenc' не найден ни в одном файле по glob 'src/**/*.rs'",
+    "severity": "warn",
+    "rationale": "[Стандарт платёжного ядра §4.1] идемпотентность авторизации по ключу"
+   }
+  ],
+  "summary": "Правил: 6, нарушений: 3 (error: 0, warn: 3); реестр: 7 правил (error: 1), отпечаток 891492e1; сверка состава правил не выполнена: реестр вне репозитория — сравнение невозможно",
+  "durations": [
+   {
+    "rule": "no_float_for_money",
+    "ms": 0
+   },
+   {
+    "rule": "thiserror_for_errors",
+    "ms": 0
+   },
+   {
+    "rule": "tech_radar_hold",
+    "ms": 0
+   },
+   {
+    "rule": "tech_radar_renamed",
+    "ms": 0
+   },
+   {
+    "rule": "authorize_idempotent",
+    "ms": 0
+   },
+   {
+    "rule": "idempotency_contract",
+    "ms": 202
+   }
+  ],
+  "inherited": [],
+  "overrides": [],
+  "fingerprint": {
+   "hash": "891492e15b0ac685099bd060e88f1ab73c9f0a345c2b00c82f99a88130e2fed9",
+   "rules": 7,
+   "errors": 1
+  },
+  "_rc": 0
+ },
+ "payments-arm-b": {
+  "repo": "/home/roman/spine-bank/кейсы/drift-control/armB-solution",
+  "passed": true,
+  "issues": [],
+  "summary": "Правил: 6, нарушений: 0 (error: 0, warn: 0); реестр: 7 правил (error: 1), отпечаток 891492e1; сверка состава правил не выполнена: реестр вне репозитория — сравнение невозможно",
+  "durations": [
+   {
+    "rule": "no_float_for_money",
+    "ms": 0
+   },
+   {
+    "rule": "thiserror_for_errors",
+    "ms": 0
+   },
+   {
+    "rule": "tech_radar_hold",
+    "ms": 0
+   },
+   {
+    "rule": "tech_radar_renamed",
+    "ms": 0
+   },
+   {
+    "rule": "authorize_idempotent",
+    "ms": 0
+   },
+   {
+    "rule": "idempotency_contract",
+    "ms": 451
+   }
+  ],
+  "inherited": [],
+  "overrides": [],
+  "fingerprint": {
+   "hash": "891492e15b0ac685099bd060e88f1ab73c9f0a345c2b00c82f99a88130e2fed9",
+   "rules": 7,
+   "errors": 1
+  },
+  "_rc": 0
+ },
+ "cards-product": {
+  "repo": "/home/roman/spine-bank/examples/corp-spine/product",
+  "passed": true,
+  "issues": [
+   {
+    "file": "Cargo.toml",
+    "line": 10,
+    "rule": "tech_radar_hold",
+    "message": "deny_dependency: пакет 'left-pad' из deny-списка — основание: Техрадар ДКА, HOLD",
+    "severity": "warn",
+    "rationale": "[Стандарт платёжного ядра §5.1] библиотека из зоны HOLD"
+   }
+  ],
+  "summary": "Правил: 3, нарушений: 1 (error: 0, warn: 1); реестр: 4 правил (error: 1), отпечаток c4703669; сверка состава правил не выполнена: реестр вне репозитория — сравнение невозможно",
+  "durations": [
+   {
+    "rule": "tech_radar_hold",
+    "ms": 0
+   },
+   {
+    "rule": "tech_radar_renamed",
+    "ms": 0
+   },
+   {
+    "rule": "idempotency_contract",
+    "ms": 50
+   }
+  ],
+  "inherited": [],
+  "overrides": [],
+  "fingerprint": {
+   "hash": "c4703669513729db35dcc2a59742fc06465b36f214ada7f5b2d178c8adea21b5",
+   "rules": 4,
+   "errors": 1
+  },
+  "_rc": 0
+ }
+}

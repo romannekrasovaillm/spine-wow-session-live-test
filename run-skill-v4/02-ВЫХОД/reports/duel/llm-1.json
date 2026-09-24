@@ -1,0 +1,19 @@
+{
+  "_seconds": 420,
+  "C01": [],
+  "C02": ["money_float"],
+  "C03": ["money_float"],
+  "C04": ["tech_radar"],
+  "C05": ["tech_radar"],
+  "C06": ["tech_radar"],
+  "C07": ["money_float"],
+  "C08": ["money_float"],
+  "C09": ["tech_radar"],
+  "C10": ["money_float"],
+  "C11": [],
+  "C12": ["idempotency"],
+  "C13": [],
+  "C14": ["idempotency"],
+  "C15": [],
+  "C16": ["tech_radar", "idempotency"]
+}

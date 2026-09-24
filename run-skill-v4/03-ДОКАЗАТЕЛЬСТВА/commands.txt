@@ -1,0 +1,327 @@
+ls -la /home/roman/.local/bin/arch-be; ls -d /home/roman/spine-bank/кейсы/drift-control/armA-solution /home/roman/spine-bank/кейсы/drift-control/armB-solution /home/roman/spine-bank/examples/corp-spine/product 2>&1
+python3 /home/roman/spine-wow-live/arch-session-v4/.qwen/skills/spine-wow-session/scripts/session.py preflight
+python3 .qwen/skills/spine-wow-session/scripts/session.py check --top 10
+for d in armA-solution armB-solution; do echo "=== $d ==="; find /home/roman/spine-bank/кейсы/drift-control/$d -type f -not -path '*/.git/*' -not -path '*/target/*' | sed "s|.*/$d/||"; done; echo "=== cards-product ==="; find /home/roman/spine-bank/examples/corp-spine/product -type f -not -path '*/.git/*' -not -path '*/target/*' | sed 's|.*/product/||'
+python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules; echo "---"; cp -r .qwen/skills/spine-wow-session/assets/demo/rules-tests/. work/rules-tests/ && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest
+python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules; echo "--- selftest ---"; python3 .qwen/skills/spine-wow-session/scripts/session.py selftest; echo "--- check ---"; python3 .qwen/skills/spine-wow-session/scripts/session.py check --top 10
+cargo --version 2>&1; rustc --version 2>&1; echo "DKA_HOME=${DKA_HOME:-<не задан>}"; echo "DKA_CARGO_TARGET=${DKA_CARGO_TARGET:-<не задан>}"
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/.qwen/skills/spine-wow-session/assets
+for r in armA-solution armB-solution; do
+  echo "=== $r ==="
+  (cd /home/roman/spine-bank/кейсы/drift-control/$r && bash "$DKA_HOME/contracts/idempotency/run_contract.sh"; echo "exit=$?")
+done
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/.qwen/skills/spine-wow-session/assets
+CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/dka-contract-target
+for r in armA-solution armB-solution; do
+  echo "================ $r ================"
+  W=$(mktemp -d); mkdir -p "$W/tests"
+  cp -r /home/roman/spine-bank/кейсы/drift-control/$r/src "$W/src"
+  printf '[package]\nname = "dka_contract_target"\nversion = "0.0.0"\nedition = "2021"\n\n[dependencies]\n' > "$W/Cargo.toml"
+  cp "$DKA_HOME/contracts/idempotency/contract_test.rs" "$W/tests/contract.rs"
+  (cd "$W" && CARGO_TARGET_DIR="$CACHE" cargo test --test contract 2>&1 | grep -E '^(error|  -->|warning: unused|help)' | head -12)
+  rm -rf "$W"
+done
+chmod +x sandbox/dka-contracts/contracts/idempotency/run_contract.sh
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+for r in armA-solution armB-solution; do
+  echo "=== $r ==="
+  (cd /home/roman/spine-bank/кейсы/drift-control/$r && bash "$DKA_HOME/contracts/idempotency/run_contract.sh"; echo "exit=$?")
+done
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+echo "=== lint-rules ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules
+echo "=== check --exec ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py check --exec --top 10
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+echo "=== selftest ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py selftest
+echo; echo "=== lint-rules ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules
+rm -rf sandbox/mutation && mkdir -p sandbox/mutation && cp -r /home/roman/spine-bank/кейсы/drift-control/armB-solution sandbox/mutation/armB-mut && ls -R sandbox/mutation/armB-mut | head -20
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json --exec > sandbox/mutation/run1.json 2>sandbox/mutation/run1.err; echo "rc=$?"
+arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json --exec > sandbox/mutation/run2.json 2>sandbox/mutation/run2.err; echo "rc2=$?"
+echo "--- детерминизм (два прогона) ---"; diff -q sandbox/mutation/run1.json sandbox/mutation/run2.json && echo "вердикт идентичен"
+echo "--- находки ---"; python3 -c "
+import json
+d=json.load(open('sandbox/mutation/run1.json'))
+print('passed:', d.get('passed'))
+for i in d.get('issues') or []:
+    print(f\"  {i.get('rule'):<22} {i.get('severity'):<6} {i.get('message','')[:110]}\")
+print('всего:', len(d.get('issues') or []))
+"
+cat sandbox/mutation/run1.err; echo "--- stdout bytes: $(wc -c < sandbox/mutation/run1.json)"; arch-be control check --help 2>&1 | head -40
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+for n in 1 2; do arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json > sandbox/mutation/run$n.json 2>sandbox/mutation/run$n.err; done
+echo "--- детерминизм (два прогона) ---"; if diff -q sandbox/mutation/run1.json sandbox/mutation/run2.json >/dev/null; then echo "вердикт идентичен"; else echo "РАЗЛИЧАЮТСЯ"; diff sandbox/mutation/run1.json sandbox/mutation/run2.json | head; fi
+echo "--- находки в мутированном armB ---"; python3 -c "
+import json
+d=json.load(open('sandbox/mutation/run1.json'))
+print('passed:', d.get('passed'))
+for i in d.get('issues') or []:
+    print('  %-22s %-6s %s' % (i.get('rule'), i.get('severity'), i.get('message','')[:100]))
+print('всего:', len(d.get('issues') or []))
+"
+export DKA_HOME=/home/roman/spine-wow-live/arch-session-v4/sandbox/dka-contracts
+cd /home/roman/spine-wow-live/arch-session-v4
+for n in 1 2; do arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json > sandbox/mutation/run$n.json 2>sandbox/mutation/run$n.err; done
+echo "--- детерминизм: сравнение без блока durations ---"
+python3 -c "
+import json
+a=json.load(open('sandbox/mutation/run1.json')); b=json.load(open('sandbox/mutation/run2.json'))
+for d in (a,b): d.pop('durations',None)
+print('результат идентичен' if a==b else 'РАЗЛИЧАЮТСЯ')
+print('отпечаток:', a['fingerprint']['hash'][:16])
+"
+echo "--- находки (мутант компилируется) ---"
+python3 -c "
+import json
+d=json.load(open('sandbox/mutation/run1.json'))
+print('passed:', d.get('passed'), '| находок:', len(d.get('issues') or []))
+for i in d.get('issues') or []:
+    print('  %-22s %s' % (i.get('rule'), i.get('message','').replace(chr(10),' ')[:150]))
+"
+cd /home/roman/spine-wow-live/arch-session-v4
+python3 -c "
+import json
+d=json.load(open('sandbox/mutation/run1.json'))
+for i in d['issues']:
+    if i['rule']=='idempotency_contract':
+        print(i['message'])
+"
+echo "--- recalc: какие правила остались молчащими ---"
+python3 -c "
+import json
+d=json.load(open('sandbox/mutation/run1.json'))
+fired={i['rule'] for i in d['issues']}
+for r in ['no_float_for_money','thiserror_for_errors','tech_radar_hold','tech_radar_renamed','authorize_idempotent','idempotency_contract']:
+    print(('  СРАБОТАЛО ' if r in fired else '  молчит   ')+r)
+"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+REPO=$PWD/sandbox/mutation/armB-mut
+W=$(mktemp -d); mkdir -p "$W/tests"
+printf '[package]\nname = "dka_contract_target"\nversion = "0.0.0"\nedition = "2021"\n\n[dependencies]\n%s = { path = "%s" }\n' "payments-core" "$REPO" > "$W/Cargo.toml"
+cp "$DKA_HOME/contracts/idempotency/contract_keyed.rs" "$W/tests/contract.rs"
+(cd "$W" && CARGO_TARGET_DIR=${XDG_CACHE_HOME:-$HOME/.cache}/dka-contract-target cargo test --quiet --test contract 2>&1 | head -30)
+echo "=== grep-причины ==="
+(cd "$W" && CARGO_TARGET_DIR=${XDG_CACHE_HOME:-$HOME/.cache}/dka-contract-target cargo test --quiet --test contract > "$W/out.txt" 2>&1)
+grep -hoE '(повторный вызов с тем же ключом[^"]*|авторизация записана в журнал дважды|повторная авторизация отклонена[^"]*|разные ключи[^"]*|error\[E[0-9]+\][^\n]*)' "$W/out.txt" | head -3
+rm -rf "$W"
+cd /home/roman/spine-wow-live/arch-session-v4
+rm -rf sandbox/mutation/armB-renamed && cp -r /home/roman/spine-bank/кейсы/drift-control/armB-solution sandbox/mutation/armB-renamed
+python3 - <<'EOF'
+from pathlib import Path
+p = Path('sandbox/mutation/armB-renamed/Cargo.toml')
+p.write_text(p.read_text().replace('thiserror = "2"\n', 'thiserror = "2"\nax = { package = "anyhow", version = "1" }\n'))
+print(p.read_text())
+EOF
+cargo build --manifest-path sandbox/mutation/armB-mut/Cargo.toml --quiet 2>&1 | head -5; echo "armB-mut build rc=$?"
+cargo build --manifest-path sandbox/mutation/armB-renamed/Cargo.toml --quiet 2>&1 | head -5; echo "armB-renamed build rc=$?"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+for d in armB-mut armB-renamed; do
+  echo "================ $d ================"
+  arch-be control check sandbox/mutation/$d --constraints work/CONSTRAINTS.corp.yaml --json > sandbox/mutation/$d.json 2>&1
+  python3 -c "
+import json,sys
+d=json.load(open('sandbox/mutation/$d.json'))
+print('находок:', len(d.get('issues') or []))
+for i in d.get('issues') or []:
+    print('  %-22s %s' % (i['rule'], i['message'].replace(chr(10),' ')[:160]))
+"
+done
+cd /home/roman/spine-wow-live/arch-session-v4
+python3 -c "
+import json
+d=json.load(open('sandbox/mutation/armB-mut.json'))
+for i in d['issues']:
+    if i['rule']=='idempotency_contract': print(i['message'])
+"
+echo "--- детерминизм на чистой сборке (два прогона) ---"
+export DKA_HOME=$PWD/sandbox/dka-contracts
+arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json > sandbox/mutation/d1.json 2>&1
+arch-be control check sandbox/mutation/armB-mut --constraints work/CONSTRAINTS.corp.yaml --json > sandbox/mutation/d2.json 2>&1
+python3 -c "
+import json
+a=json.load(open('sandbox/mutation/d1.json')); b=json.load(open('sandbox/mutation/d2.json'))
+da=a.pop('durations',None); db=b.pop('durations',None)
+print('вердикт идентичен' if a==b else 'РАЗЛИЧАЮТСЯ')
+print('время правила-контракта:', [x['ms'] for x in (da or []) if x['rule']=='idempotency_contract'], [x['ms'] for x in (db or []) if x['rule']=='idempotency_contract'])
+"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+python3 .qwen/skills/spine-wow-session/scripts/session.py check --exec >/dev/null
+python3 .qwen/skills/spine-wow-session/scripts/session.py precision sample --per-rule 25
+echo "--- размеченная выборка ---"
+cat reports/precision-labels.csv
+cd /home/roman/spine-wow-live/arch-session-v4
+python3 - <<'EOF'
+import csv
+labels = {
+    "authorize_idempotent": "tp",    # в armA нет идемпотентности вовсе; подтверждено контрактом
+    "idempotency_contract": "tp",    # контракт: ретрай отклонён, дедупликации нет
+    "tech_radar_hold": "tp",         # left-pad реально подключён; в реестре ДКА исключения нет
+    "thiserror_for_errors": "tp",    # §3.2 нарушен по букве: thiserror отсутствует
+}
+p = "reports/precision-labels.csv"
+rows = list(csv.DictReader(open(p, encoding="utf-8")))
+for r in rows:
+    r["label"] = labels.get(r["rule"], "")
+with open(p, "w", encoding="utf-8", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["rule","repo","file","line","message","label"])
+    w.writeheader(); w.writerows(rows)
+print("размечено:", len(rows))
+EOF
+python3 .qwen/skills/spine-wow-session/scripts/session.py precision score
+cd /home/roman/spine-wow-live/arch-session-v4
+python3 - <<'EOF'
+import math
+def wilson(tp, n, z=1.96):
+    if n == 0: return 0.0
+    p = tp/n; den = 1+z*z/n; centre = p+z*z/(2*n)
+    margin = z*math.sqrt((p*(1-p)+z*z/(4*n))/n)
+    return max(0.0, (centre-margin)/den)
+
+# Размеченные находки: 3 репозитория сессии + 2 мутанта (в области действия)
+data = {
+    "no_float_for_money":     (0, 2),   # 2 находки: комментарий с f64 и метрика задержки — не деньги
+    "thiserror_for_errors":   (1, 1),
+    "tech_radar_hold":        (1, 1),
+    "tech_radar_renamed":     (1, 1),
+    "authorize_idempotent":   (1, 1),
+    "idempotency_contract":   (1, 1),
+}
+print(f"{'правило':<22}{'tp':>3}{'n':>3}{'точность':>10}{'нижняя':>9}  решение")
+for k,(tp,n) in sorted(data.items(), key=lambda x: wilson(*x[1])):
+    p = tp/n; low = wilson(tp,n)
+    verdict = "показывать" if low >= 0.9 else ("сузить правило" if p < 0.9 else "разметить больше")
+    print(f"{k:<22}{tp:>3}{n:>3}{p:>10.2f}{low:>9.2f}  {verdict}")
+tot_tp = sum(v[0] for v in data.values()); tot_n = sum(v[1] for v in data.values())
+print(f"\nитого: {tot_tp}/{tot_n} = {tot_tp/tot_n:.2f}, нижняя граница {wilson(tot_tp,tot_n):.2f} (порог 0.90)")
+EOF
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+echo "=== 1. baseline: регистрируем выпущенный слой и пины продуктов ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet init
+echo; echo "=== 2. кто на какой версии ДО релиза ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet report
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+echo "=== 3. выпуск версии 2026.2 с новыми правилами ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet bump --add-rules work/new-rules.yaml
+echo; echo "=== 4. кто ещё не применил 2026.2 ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet report
+echo; echo "=== содержимое релиза ==="
+python3 -c "
+import yaml
+d=yaml.safe_load(open('sandbox/corp/CONSTRAINTS.corp.yaml'))
+print('version:', d['version'], '| правил:', len(d['constraints']))
+for r in d['constraints']: print('  ', r.get('id','-'), r['name'], r.get('severity'))
+"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+echo "=== 5. продукты перепиновываются на 2026.2 ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet repin
+echo; echo "=== 6. состояние после перепиновки ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py fleet report
+echo; echo "=== что именно находит гейт у cards-product через унаследованный файл ==="
+arch-be control check /home/roman/spine-bank/examples/corp-spine/product --constraints sandbox/products/cards-product/CONSTRAINTS.yaml --json 2>&1 | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+for i in d.get('issues') or []: print('  %-24s %-6s %s' % (i['rule'], i['severity'], i['message'][:95]))
+print('  всего:', len(d.get('issues') or []))
+"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+python3 .qwen/skills/spine-wow-session/scripts/session.py ci-redteam; echo "exit=$?"
+cd /home/roman/spine-wow-live/arch-session-v4
+export DKA_HOME=$PWD/sandbox/dka-contracts
+echo "=== done-check (готовность подготовки сессии) ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "exit=$?"
+echo; echo "=== pack (раздатка для DevOps) ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py pack
+echo; echo "=== что попало в раздатку ==="
+ls -1 handout/ | head -20
+cd /home/roman/spine-wow-live/arch-session-v4
+unset DKA_HOME
+python3 .qwen/skills/spine-wow-session/scripts/session.py duel prepare; echo "exit=$?"
+cd /home/roman/spine-wow-live/arch-session-v4/sandbox/duel
+echo "=== состав наборов (верхний уровень) ==="
+for k in kit-llm kit-combo; do echo "[$k]"; ls -1 $k; done
+echo; echo "=== случаев в кейсах: $(ls -1 cases | wc -l) ==="; ls -1 cases
+echo; echo "=== размеры ==="; du -sh cases kit-llm kit-combo
+echo; echo "=== утечка истины? ищу truth/DUEL/ответы внутри наборов ==="
+grep -rIl --exclude-dir=cases -E '_DUEL_TRUTH|"C01".*money_float|session\.py|reports/duel' kit-llm kit-combo 2>/dev/null || echo "нет упоминаний истины, session.py и отчётов"
+echo; echo "=== есть ли в наборах файлы вне cases/standard.md/TASK.md/exceptions.yaml ==="
+find kit-llm kit-combo -maxdepth 1 -type f | sort
+cd /home/roman/spine-wow-live/arch-session-v4
+echo "=== проверка: не подсказывает ли шаблон ответа в TASK.md (пример с C02) ==="
+python3 - <<'EOF'
+import base64, json, re
+src = open('.qwen/skills/spine-wow-session/scripts/session.py', encoding='utf-8').read()
+b64 = re.search(r'_DUEL_TRUTH_B64\s*=\s*"([^"]+)"', src).group(1)
+truth = json.loads(base64.b64decode(b64))
+print('истина по C02:', truth['C02'])
+print('случаев в истине:', len(truth))
+print('пример в TASK.md kit-llm:', [l for l in open('sandbox/duel/kit-llm/TASK.md', encoding='utf-8') if 'C02' in l][0].strip())
+EOF
+echo; echo "=== детерминированные столбцы дуэли (без LLM) ==="
+unset DKA_HOME
+python3 .qwen/skills/spine-wow-session/scripts/session.py duel score 2>&1 | head -40
+cd /home/roman/spine-wow-live/arch-session-v4
+echo "=== хвост отчёта (выводы) ==="; tail -12 reports/duel.md
+echo; echo "=== снимаю подсказку ответа из наборов ==="
+python3 - <<'EOF'
+from pathlib import Path
+old = '{"_seconds": 300, "C01": [], "C02": ["money_float"], "...": []}'
+new = '{"_seconds": 300, "C01": [], "...": []}'
+for kit in ("kit-llm", "kit-combo"):
+    p = Path("sandbox/duel") / kit / "TASK.md"
+    t = p.read_text(encoding="utf-8")
+    assert old in t, kit
+    p.write_text(t.replace(old, new), encoding="utf-8")
+    print(f"{kit}/TASK.md: пример обезврежен")
+EOF
+echo; echo "=== контроль: упоминаний C02 в наборах больше нет ==="
+grep -rn "C02" sandbox/duel/kit-llm/TASK.md sandbox/duel/kit-combo/TASK.md sandbox/duel/kit-combo/spine-findings.json 2>/dev/null | head -5 || echo "нет"
+cd /home/roman/spine-wow-live/arch-session-v4
+echo "=== каталог ответов ==="; ls -la reports/duel 2>&1 | head -5
+echo; echo "=== пример структуры случая C12 ==="; find sandbox/duel/cases/C12 -type f | sed 's|sandbox/duel/cases/||'
+echo; echo "=== кому какой набор (по 5 ответов) ==="; ls -1 sandbox/duel/kit-combo/cases | wc -l
+cd /home/roman/spine-wow-live/arch-session-v4
+ls -la reports/duel/
+cd /home/roman/spine-wow-live/arch-session-v4
+unset DKA_HOME
+python3 .qwen/skills/spine-wow-session/scripts/session.py duel score; echo "exit=$?"
+cd /home/roman/spine-wow-live/arch-session-v4
+python3 - <<'EOF'
+import base64, json, re
+src = open('.qwen/skills/spine-wow-session/scripts/session.py', encoding='utf-8').read()
+truth = json.loads(base64.b64decode(re.search(r'_DUEL_TRUTH_B64\s*=\s*"([^"]+)"', src).group(1)))
+def load(prefix):
+    out=[]
+    for k in range(1,6):
+        from pathlib import Path
+        f=Path('reports/duel')/f'{prefix}-{k}.json'
+        if f.exists(): out.append(json.loads(f.read_text(encoding='utf-8')))
+    return out
+for name, runs in (("чистая LLM", load('llm')), ("LLM+Spine", load('combo'))):
+    ok=sum(set(r.get(c,[]))==set(truth[c]) for r in runs for c in truth)/ (len(runs)*len(truth))
+    per_run=[sum(set(r.get(c,[]))==set(truth[c]) for c in truth) for r in runs]
+    ident=len({json.dumps({c: sorted(set(r.get(c,[]))) for c in truth}, sort_keys=True) for r in runs})
+    print(f'{name}: верно по прогонам {per_run} из 16; различных наборов ответов между прогонами: {ident} из {len(runs)}')
+print('истина по C11/C13:', truth['C11'], truth['C13'])
+EOF
+echo; echo "=== что pack кладёт в раздатку (duel?) ==="
+grep -n "duel\|reports/" .qwen/skills/spine-wow-session/scripts/session.py | sed -n '/def cmd_pack/,$p' | head -20
+cd /home/roman/spine-wow-live/arch-session-v4
+unset DKA_HOME
+echo "=== готовность (done-check) ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "exit=$?"
+echo; echo "=== раздатка (pack) ==="
+python3 .qwen/skills/spine-wow-session/scripts/session.py pack
+echo; echo "=== содержимое handout/ ==="; ls -1 handout/
+echo; echo "=== версия реестра, который уехал в раздатку ==="
+python3 -c "
+import yaml
+d=yaml.safe_load(open('handout/CONSTRAINTS.corp.yaml'))
+print('version:', d['version'], '| правил:', len(d['constraints']))
+print('есть ли правила релиза 2026.2:', [r['name'] for r in d['constraints'] if r['name'] in ('no_anyhow_in_code','tech_radar_lock')] or 'НЕТ')
+"

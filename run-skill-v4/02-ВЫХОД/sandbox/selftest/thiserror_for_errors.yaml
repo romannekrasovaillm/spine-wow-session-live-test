@@ -1,0 +1,12 @@
+constraints:
+- id: C-PAY-002
+  name: thiserror_for_errors
+  type: must_contain
+  glob: Cargo.toml
+  pattern: thiserror
+  std_ref: Стандарт платёжного ядра §3.2
+  rationale: '[Стандарт платёжного ядра §3.2] ошибки домена описываются типизированно
+    (thiserror)'
+  severity: warn
+  applies_to:
+  - payment-core

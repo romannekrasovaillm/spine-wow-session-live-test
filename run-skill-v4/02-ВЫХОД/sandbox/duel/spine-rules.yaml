@@ -1,0 +1,37 @@
+version: duel-4-contract
+constraints:
+- name: money_float
+  type: must_not_contain
+  glob:
+  - '**/*.rs'
+  pattern: \bf(32|64)\b
+  severity: block
+- name: tech_radar
+  type: deny_dependency
+  deny:
+  - anyhow
+  - left-pad
+  severity: block
+- name: tech_radar_renamed
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: package\s*=\s*"(anyhow|left-pad)"
+  severity: block
+- name: tech_radar_git
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: git\s*=\s*"[^"]*(anyhow|left-pad)[^"]*"
+  severity: block
+- name: tech_radar_lock
+  type: must_not_contain
+  glob:
+  - '**/Cargo.lock'
+  pattern: name = "(anyhow|left-pad)"
+  severity: block
+- name: idempotency_contract
+  type: command_succeeds
+  command: bash "$DKA_HOME/contracts/idempotency/run_contract.sh"
+  timeout_secs: 900
+  severity: block
