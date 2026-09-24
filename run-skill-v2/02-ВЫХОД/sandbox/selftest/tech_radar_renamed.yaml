@@ -1,0 +1,10 @@
+constraints:
+- id: C-PAY-005
+  name: tech_radar_renamed
+  type: must_not_contain
+  glob:
+  - '**/Cargo.toml'
+  pattern: package\s*=\s*"(anyhow|left-pad)"
+  std_ref: Стандарт платёжного ядра §5.1
+  rationale: '[Стандарт платёжного ядра §5.1] пакет из зоны HOLD подключён под псевдонимом'
+  severity: warn

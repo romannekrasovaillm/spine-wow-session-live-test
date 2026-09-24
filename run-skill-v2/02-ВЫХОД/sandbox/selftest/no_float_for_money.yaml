@@ -1,0 +1,12 @@
+constraints:
+- id: C-PAY-001
+  name: no_float_for_money
+  type: must_not_contain
+  glob:
+  - src/**/*.rs
+  pattern: \bf(32|64)\b
+  std_ref: Стандарт платёжного ядра §2.1
+  rationale: '[Стандарт платёжного ядра §2.1] деньги не в типах с плавающей точкой'
+  severity: warn
+  applies_to:
+  - payment-core

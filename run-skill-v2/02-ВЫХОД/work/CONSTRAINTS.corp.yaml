@@ -1,0 +1,55 @@
+# Корпоративный слой правил ДКА. Сгенерировано агентом из work/requirements.md (класс A и
+# структурная часть B), проверяется архитектором и selftest. Поля правил — references/rules.md.
+version: "2026.1"
+constraints:
+  - id: C-PAY-001
+    name: no_float_for_money
+    type: must_not_contain
+    glob:
+      - src/**/*.rs
+    pattern: \bf(32|64)\b
+    std_ref: Стандарт платёжного ядра §2.1
+    rationale: '[Стандарт платёжного ядра §2.1] деньги не в типах с плавающей точкой'
+    severity: block
+    applies_to: [payment-core]
+  - id: C-PAY-002
+    name: thiserror_for_errors
+    type: must_contain
+    glob: Cargo.toml
+    pattern: thiserror
+    std_ref: Стандарт платёжного ядра §3.2
+    rationale: '[Стандарт платёжного ядра §3.2] ошибки домена типизированы через thiserror'
+    severity: warn
+    applies_to: [payment-core]
+  - id: C-PAY-003
+    name: authorize_idempotent
+    type: must_contain
+    glob:
+      - src/**/*.rs
+    pattern: '[Ii]dempotenc'
+    std_ref: Стандарт платёжного ядра §4.1
+    rationale: '[Стандарт платёжного ядра §4.1] авторизация идемпотентна по ключу'
+    severity: warn
+    applies_to: [payment-core]
+  - id: C-PAY-004
+    name: tech_radar_hold
+    type: deny_dependency
+    deny: [anyhow, left-pad]
+    reference: Техрадар ДКА, HOLD
+    std_ref: Стандарт платёжного ядра §5.1
+    rationale: '[Стандарт платёжного ядра §5.1] библиотека из зоны HOLD'
+    severity: warn
+    closed_by: [tech_radar_renamed]
+  - id: C-PAY-005
+    name: tech_radar_renamed
+    type: must_not_contain
+    glob:
+      - '**/Cargo.toml'
+    pattern: package\s*=\s*"(anyhow|left-pad)"
+    std_ref: Стандарт платёжного ядра §5.1
+    rationale: '[Стандарт платёжного ядра §5.1] пакет из зоны HOLD подключён под псевдонимом'
+    severity: block
+  - name: observability_standard
+    unverifiable: true
+    owner: '@dka-observability'
+    std_ref: Стандарт платёжного ядра §6.1

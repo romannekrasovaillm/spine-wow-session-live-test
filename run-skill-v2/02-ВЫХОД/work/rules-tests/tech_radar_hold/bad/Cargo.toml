@@ -1,0 +1,4 @@
+[package]
+name = "p"
+[dependencies]
+left-pad = "1"

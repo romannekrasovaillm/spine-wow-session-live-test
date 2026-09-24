@@ -1,0 +1,28 @@
+cd /home/roman/spine-wow-live/arch-session-v2 && git status --short && echo "--- log ---" && git log --oneline -15
+cd /home/roman/spine-wow-live/arch-session-v2 && find . -type f -not -path './.git/*' | sort && echo "=== dirs ===" && find . -type d -not -path './.git/*' | sort
+ARCH_BE=/home/roman/.local/bin/arch-be /home/roman/.local/bin/arch-be --version 2>&1; echo "---"; for p in "/home/roman/spine-bank/кейсы/drift-control/armA-solution" "/home/roman/spine-bank/кейсы/drift-control/armB-solution" "/home/roman/spine-bank/examples/corp-spine/product"; do if [ -d "$p" ]; then echo "OK   $p"; else echo "MISS $p"; fi; done
+for p in "/home/roman/spine-bank/кейсы/drift-control/armA-solution" "/home/roman/spine-bank/кейсы/drift-control/armB-solution" "/home/roman/spine-bank/examples/corp-spine/product"; do echo "======== $p"; find "$p" -type f -not -path '*/target/*' -not -path '*/.git/*' | sed "s|$p/||" | sort; done
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py preflight 2>&1 | tail -25
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py check --top 10 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py ci-redteam 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest --scaffold 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py selftest 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules; echo "=== exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py check --top 10
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== exit=$? ==="
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py ci-redteam --repo cards-product --rule tech_radar_hold; echo "=== exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py pack
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== exit=$? ==="
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py precision sample --per-rule 25 2>&1
+ls -1 /home/roman/spine-bank/ && echo "--- кейсы ---" && ls -1 /home/roman/spine-bank/кейсы/ 2>/dev/null && echo "--- examples ---" && ls -1 /home/roman/spine-bank/examples/ 2>/dev/null
+find /home/roman/spine-bank/кейсы /home/roman/spine-bank/examples -name Cargo.toml -not -path '*/target/*' 2>/dev/null | sort
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py precision score 2>&1; echo "=== exit=$? ==="
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules; echo "=== lint exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== done exit=$? ==="
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py lint-rules; echo "=== lint exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py check --top 10; echo "=== check exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== done exit=$? ==="
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py pack 2>&1 | tail -3
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py duel prepare 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2/sandbox/duel && find . -type f | sort && echo "=== WARN: не показывать LLM ===" && ls -la
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py duel score 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py duel score 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== done exit=$? ==="; python3 .qwen/skills/spine-wow-session/scripts/session.py pack 2>&1
+cd /home/roman/spine-wow-live/arch-session-v2 && unzip -l handout-spine-session.zip | tail -25 && echo "--- размер ---" && du -h handout-spine-session.zip
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py pack 2>&1 | tail -3 && echo "--- содержимое архива ---" && unzip -l handout-spine-session.zip | tail -22
+cd /home/roman/spine-wow-live/arch-session-v2 && python3 .qwen/skills/spine-wow-session/scripts/session.py done-check; echo "=== done exit=$? ==="
